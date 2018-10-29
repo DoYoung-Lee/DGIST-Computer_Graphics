@@ -5,10 +5,11 @@
 
 // #include "3DObjectFunc.h"
 #include "UserInputFunc.h"
-// #include "ShaderFunc.h"
+#include "FileFunc.h"
 
 #include <fstream>
 #include <string>
+#include <iostream>
 
 #include <GL/glew.h>
 #include <gl/freeglut.h>
@@ -31,13 +32,6 @@ struct Object {
 	int n_vertices;
 };
 
-static void InitShaders() {
-	GLint success;
-	GLchar error_log[1024];
-
-
-}
-
 static void InitializeGlutCallbacks(void) {
 
 }
@@ -49,7 +43,12 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("CrossRoad3D");
 	InitializeGlutCallbacks();
-
+	GLenum res = glewInit();
+	if (res != GLEW_OK) {
+		std::cerr << "Error: " << glewGetErrorString(res) << std::endl;
+		return 1;
+	}
+	InitShaders(shader_program, "vertex_shader.glsl", "frag_shader.glsl");
 
 	return 0;
 }

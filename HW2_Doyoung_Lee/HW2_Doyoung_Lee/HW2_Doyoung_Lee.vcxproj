@@ -121,11 +121,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="frag_shader.glsl" />
     <None Include="vertex_shader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FileFunc.cpp" />
+    <ClCompile Include="MainSource.cpp" />
+    <ClCompile Include="UserInputFunc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FileFunc.h" />
+    <ClInclude Include="UserInputFunc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -95,6 +95,8 @@ void InitShaders(GLuint &shader_program, const char* path_vertex_shader, const c
 	glUseProgram(shader_program);
 }
 
+/* OBJ loader is not finished
+
 struct int3 {
 	int3(int v, int vt, int vn) : v(v), vt(vt), vn(vn) { }
 	int v, vt, vn;
@@ -137,4 +139,4 @@ bool ObjLoader(const char* path, std::vector<glm::vec3> &out_vertices, std::vect
 	}
 	
 }
-
+*/
