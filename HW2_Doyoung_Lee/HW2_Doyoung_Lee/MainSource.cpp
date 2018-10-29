@@ -153,6 +153,7 @@ static void RenderScene3DCB() {
 	
 	glEnable(GL_DEPTH_TEST);
 	glDrawArrays(GL_TRIANGLES, 0, 3 * 12);
+	glDrawElements(GL_TRIANGLES, 3 * 12, GL_UNSIGNED_INT, 0);
 	glDisable(GL_DEPTH_TEST);
 
 	glDisableVertexAttribArray(position_loc);
