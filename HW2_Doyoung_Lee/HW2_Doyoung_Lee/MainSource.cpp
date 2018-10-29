@@ -1,6 +1,6 @@
 /* -------------------------------- 
 	References:
-
+	main reference is lecture note provided by Sunghyun Cho, ICE, DGIST.
    -------------------------------- */
 
 #include "UserInputFunc.h"
@@ -126,6 +126,8 @@ static void RenderScene2DCB() {
 }
 
 static void RenderScene3DCB() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	GLint matrix_loc = glGetUniformLocation(shader_program, "MVP");
 	glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f); // glm::perspective is member of matrix_transform.hpp
 	glm::mat4 view = glm::lookAt(
@@ -137,6 +139,26 @@ static void RenderScene3DCB() {
 	glm::mat4 MVP = projection * view * model;
 	glUniformMatrix4fv(matrix_loc, 1, GL_FALSE, &MVP[0][0]);
 
+	// 1st attribute buffer: vertices
+	GLint position_loc = glGetAttribLocation(shader_program, "Position");
+	glEnableVertexAttribArray(position_loc);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer_obj);
+	glVertexAttribPointer(position_loc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	// 2nd attribute buffer: colors
+	GLint color_loc = glGetAttribLocation(shader_program, "Color");
+	glEnableVertexAttribArray(color_loc);
+	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer_obj);
+	glVertexAttribPointer(color_loc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	
+	glEnable(GL_DEPTH_TEST);
+	glDrawArrays(GL_TRIANGLES, 0, 3 * 12);
+	glDisable(GL_DEPTH_TEST);
+
+	glDisableVertexAttribArray(position_loc);
+	glDisableVertexAttribArray(color_loc);
+
+	glutSwapBuffers();
 }
 
 static void InitGlutCallbacks(void) {
@@ -149,7 +171,7 @@ static void InitGlutCallbacks(void) {
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(640, 480);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("CrossRoad3D");
@@ -159,7 +181,7 @@ int main(int argc, char** argv) {
 		std::cerr << "Error: " << glewGetErrorString(res) << std::endl;
 		return 1;
 	}
-	InitShaders(shader_program, "vertex_shader_2d.glsl", "frag_shader_2d.glsl");
+	InitShaders(shader_program, "vertex_shader_3d.glsl", "frag_shader_3d.glsl");
 	CreateVertexBuffer(); // Create vertex buffer using vertice data
 	InitAnimObjects(); // Initialize animation objects
 	glutMainLoop();

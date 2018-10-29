@@ -122,7 +122,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="frag_shader_2d.glsl" />
+    <None Include="frag_shader_3d.glsl" />
     <None Include="vertex_shader_2d.glsl" />
+    <None Include="vertex_shader_3d.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TimerFunc.cpp" />

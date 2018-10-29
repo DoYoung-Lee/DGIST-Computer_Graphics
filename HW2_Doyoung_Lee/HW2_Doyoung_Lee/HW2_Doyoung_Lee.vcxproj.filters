@@ -21,6 +21,12 @@
     <None Include="vertex_shader_2d.glsl">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="frag_shader_3d.glsl">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="vertex_shader_3d.glsl">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileFunc.cpp">
