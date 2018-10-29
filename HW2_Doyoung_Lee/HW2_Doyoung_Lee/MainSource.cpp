@@ -51,7 +51,8 @@ static void CreateVertexBuffer() {
 	
 	glGenBuffers(1, &vertexbuffer_obj);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer_obj);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW); // float array case
+	// glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW); // float vector case
 
 	float colors[] = {
 		1.0f, 0.0f, 0.0f,
@@ -65,7 +66,7 @@ static void CreateVertexBuffer() {
 	};
 	glGenBuffers(1, &colorbuffer_obj);
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer_obj);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), &colors[0], GL_STATIC_DRAW);
 
 	unsigned int indices[] = {
 		0, 1, 3,
@@ -84,7 +85,7 @@ static void CreateVertexBuffer() {
 
 	glGenBuffers(1, &indexbufer_obj);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexbufer_obj);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW);
 }
 
 static void InitAnimObjects() {
