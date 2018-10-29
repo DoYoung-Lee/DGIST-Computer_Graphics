@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="frag_shader.glsl">
+    <None Include="frag_shader_2d.glsl">
       <Filter>리소스 파일</Filter>
     </None>
-    <None Include="vertex_shader.glsl">
+    <None Include="vertex_shader_2d.glsl">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>
@@ -32,12 +32,24 @@
     <ClCompile Include="UserInputFunc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="VertexFunc.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerFunc.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileFunc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="UserInputFunc.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexFunc.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerFunc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

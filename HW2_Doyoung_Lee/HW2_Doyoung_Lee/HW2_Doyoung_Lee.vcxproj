@@ -121,17 +121,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="frag_shader.glsl" />
-    <None Include="vertex_shader.glsl" />
+    <None Include="frag_shader_2d.glsl" />
+    <None Include="vertex_shader_2d.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="TimerFunc.cpp" />
+    <ClCompile Include="VertexFunc.cpp" />
     <ClCompile Include="FileFunc.cpp" />
     <ClCompile Include="MainSource.cpp" />
     <ClCompile Include="UserInputFunc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileFunc.h" />
+    <ClInclude Include="TimerFunc.h" />
     <ClInclude Include="UserInputFunc.h" />
+    <ClInclude Include="VertexFunc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
