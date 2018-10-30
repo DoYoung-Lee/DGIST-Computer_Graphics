@@ -5,10 +5,13 @@
 
 #include <GL/glew.h>
 #include <gl/freeglut.h>
+#include <glm/glm.hpp>
 
 #include <vector>
+#include <algorithm>
 
 // ----------- ----------- ----------- ----------- -----------
+class Object;
 
 class ObjectList {
 private:
@@ -16,23 +19,23 @@ private:
 	int n_objects;
 	int vertex_list_index;
 public:
-	ObjectList::ObjectList();
-	void CreateObject();
-	void DestroyObject();
-}
+	ObjectList();
+	void CreateObject(Object*);
+	void DestroyObject(Object*);
+};
 
 ObjectList::ObjectList() {
 	n_objects = 0;
 	vertex_list_index = 0;
 }
 
-void ObjectList::CreateObject(Object &new_obj) {
-	list.push_back(&new_obj);
+void ObjectList::CreateObject(Object *new_obj) {
+	list.push_back(new_obj);
 	n_objects += 1;
 }
 
-void ObjectList::DestroyObject(Object &target_obj) {
-	list.erase(&target_obj);
+void ObjectList::DestroyObject(Object *target_obj) {
+	list.erase(std::find(list.begin(), list.end(), target_obj));
 	n_objects -= 1;
 }
 
@@ -40,41 +43,41 @@ void ObjectList::DestroyObject(Object &target_obj) {
 
 class Object {
 private:
-	vec3 position;
-	vec3 velocity;
+	glm::vec3 position;
+	glm::vec3 velocity;
 	int n_vertices;
 	int vertex_base_index;
 public:
-	Object::Object();
+	Object(ObjectList*);
 	float GetPosition();
 	void SetPosition(float, float, float);
-	bool Collide(&Object);
+	bool Collide(Object*);
 	void UpdatePosition();
 };
 
-Object::Object(ObjectList &obj_list) {
-	obj_list.CreateObject(this);
+Object::Object(ObjectList *obj_list) {
+	(*obj_list).CreateObject(this);
 }
 
-float AnimObject::GetPosition() {
+float Object::GetPosition() {
 	return position.x, position.y, position.z;
 }
 
-void AnimObject::SetPosition(int new_x, int new_y, int new_z) {
+void Object::SetPosition(float new_x, float new_y, float new_z) {
 	position.x = new_x;
 	position.y = new_y;
 	position.z = new_z;
 }
 
-bool AnimObject::Collide(Object* target_obj) {
-	bool is_x_collide = target_obj->position.x;
-	bool is_y_collide = ;
-	bool is_z_collide = ;
+bool Object::Collide(Object* target_obj) {
+	bool is_x_collide = false; //target_obj->position.x;
+	bool is_y_collide = false;
+	bool is_z_collide = false;
 
 	return (is_x_collide | is_y_collide | is_z_collide);
 }
 
-void AnimObject::UpdatePosition() {
+void Object::UpdatePosition() {
 	float new_x = position.x + velocity.x;
 	float new_y = position.y + velocity.y;
 	float new_z = position.z + velocity.z;

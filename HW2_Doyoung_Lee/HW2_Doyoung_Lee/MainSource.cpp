@@ -26,34 +26,30 @@ GLuint vertexbuffer_obj;
 GLuint colorbuffer_obj;
 GLuint indexbufer_obj;
 
-std::vector<float> vertices_obj;
-std::vector<float> colors_obj;
+std::vector<glm::vec3> vertices_obj;
+std::vector<glm::vec3> colors_obj;
 std::vector<unsigned int> indices_obj;
 
 void InitObjectsVertex() {
-	vertices_obj.push_back( {
-		0.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		0.0f, 1.0f, 1.0f,
-	} );
+	vertices_obj.push_back({ 0.0f, 0.0f, 0.0f });
+	vertices_obj.push_back({ 1.0f, 0.0f, 0.0f });
+	vertices_obj.push_back({ 1.0f, 1.0f, 0.0f });
+	vertices_obj.push_back({ 0.0f, 1.0f, 0.0f });
+	vertices_obj.push_back({ 0.0f, 0.0f, 1.0f });
+	vertices_obj.push_back({ 1.0f, 0.0f, 1.0f });
+	vertices_obj.push_back({ 1.0f, 1.0f, 1.0f });
+	vertices_obj.push_back({ 0.0f, 1.0f, 1.0f });
+	
+	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
+	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
+	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
+	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
+	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
+	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
+	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
+	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
 
-	colors_obj.push_back( {
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-	} );
-
-	indices_obj.push_back( {
+	indices_obj = {
 		0, 1, 3, // Cube 1 begin
 		0, 3, 4,
 		0, 4, 1,
@@ -66,7 +62,7 @@ void InitObjectsVertex() {
 		7, 3, 4,
 		7, 4, 6,
 		7, 6, 3, // Cube 1 end
-	} );
+	};
 }
 
 static void CreateVertexBuffer() {
@@ -78,11 +74,11 @@ static void CreateVertexBuffer() {
 	glGenBuffers(1, &vertexbuffer_obj);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer_obj);
 	// glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW); // float array case
-	glBufferData(GL_ARRAY_BUFFER, vertices_obj.size() * sizeof(float), &vertices_obj[0], GL_STATIC_DRAW); // float vector case
+	glBufferData(GL_ARRAY_BUFFER, vertices_obj.size() * sizeof(glm::vec3), &vertices_obj[0], GL_STATIC_DRAW); // float vector case
 
 	glGenBuffers(1, &colorbuffer_obj);
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer_obj);
-	glBufferData(GL_ARRAY_BUFFER, colors_obj.size() * sizeof(float), &colors_obj[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, colors_obj.size() * sizeof(glm::vec3), &colors_obj[0], GL_STATIC_DRAW);
 
 	glGenBuffers(1, &indexbufer_obj);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexbufer_obj);
@@ -152,9 +148,8 @@ static void RenderScene3DCB() {
 	glEnableVertexAttribArray(color_loc);
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer_obj);
 	glVertexAttribPointer(color_loc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	
+
 	glEnable(GL_DEPTH_TEST);
-	glDrawArrays(GL_TRIANGLES, 0, 3 * 12);
 	glDrawElements(GL_TRIANGLES, 3 * 12, GL_UNSIGNED_INT, 0);
 	glDisable(GL_DEPTH_TEST);
 
