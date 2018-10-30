@@ -26,20 +26,12 @@ GLuint vertexbuffer_obj;
 GLuint colorbuffer_obj;
 GLuint indexbufer_obj;
 
-struct Object {
-	float x, y;
-	float rot;
-	float vel_x, vel_y, vel_rot;
-	int vertex_base_index;
-	int n_vertices;
-};
+std::vector<float> vertices_obj;
+std::vector<float> colors_obj;
+std::vector<unsigned int> indices_obj;
 
-
-static void CreateVertexBuffer() {
-	glCreateVertexArrays(1, &vertex_array_obj);
-	glBindVertexArray(vertex_array_obj);
-
-	std::vector<float> vertices {
+void InitObjectsVertex() {
+	vertices_obj.push_back( {
 		0.0f, 0.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
 		1.0f, 1.0f, 0.0f,
@@ -48,14 +40,9 @@ static void CreateVertexBuffer() {
 		1.0f, 0.0f, 1.0f,
 		1.0f, 1.0f, 1.0f,
 		0.0f, 1.0f, 1.0f,
-	};	
-	
-	glGenBuffers(1, &vertexbuffer_obj);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer_obj);
-	// glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW); // float array case
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW); // float vector case
+	} );
 
-	std::vector<float> colors {
+	colors_obj.push_back( {
 		1.0f, 1.0f, 1.0f,
 		1.0f, 1.0f, 1.0f,
 		1.0f, 1.0f, 1.0f,
@@ -64,13 +51,10 @@ static void CreateVertexBuffer() {
 		1.0f, 1.0f, 1.0f,
 		1.0f, 1.0f, 1.0f,
 		1.0f, 1.0f, 1.0f,
-	};
-	glGenBuffers(1, &colorbuffer_obj);
-	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer_obj);
-	glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(float), &colors[0], GL_STATIC_DRAW);
+	} );
 
-	std::vector<unsigned int> indices {
-		0, 1, 3,
+	indices_obj.push_back( {
+		0, 1, 3, // Cube 1 begin
 		0, 3, 4,
 		0, 4, 1,
 		2, 1, 3,
@@ -81,19 +65,35 @@ static void CreateVertexBuffer() {
 		5, 6, 1,
 		7, 3, 4,
 		7, 4, 6,
-		7, 6, 3,
-	};
+		7, 6, 3, // Cube 1 end
+	} );
+}
+
+static void CreateVertexBuffer() {
+	InitObjectsVertex();
+
+	glCreateVertexArrays(1, &vertex_array_obj);
+	glBindVertexArray(vertex_array_obj);
+	
+	glGenBuffers(1, &vertexbuffer_obj);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer_obj);
+	// glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW); // float array case
+	glBufferData(GL_ARRAY_BUFFER, vertices_obj.size() * sizeof(float), &vertices_obj[0], GL_STATIC_DRAW); // float vector case
+
+	glGenBuffers(1, &colorbuffer_obj);
+	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer_obj);
+	glBufferData(GL_ARRAY_BUFFER, colors_obj.size() * sizeof(float), &colors_obj[0], GL_STATIC_DRAW);
 
 	glGenBuffers(1, &indexbufer_obj);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexbufer_obj);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_obj.size() * sizeof(unsigned int), &indices_obj[0], GL_STATIC_DRAW);
 }
 
 static void InitAnimObjects() {
 
 }
 
-static void RenderScene2DCB() {
+static void RenderScene2DCB() { // legacy code for 2d drawing
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	GLint position_loc = glGetAttribLocation(shader_program, "Position");
