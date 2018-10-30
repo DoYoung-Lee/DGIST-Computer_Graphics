@@ -22,6 +22,7 @@ public:
 	ObjectList();
 	void CreateObject(Object*);
 	void DestroyObject(Object*);
+	void DrawObjects();
 };
 
 ObjectList::ObjectList() {
@@ -39,6 +40,10 @@ void ObjectList::DestroyObject(Object *target_obj) {
 	n_objects -= 1;
 }
 
+void ObjectList::DrawObjects() {
+
+}
+
 // ----------- ----------- ----------- ----------- -----------
 
 class Object {
@@ -53,6 +58,7 @@ public:
 	void SetPosition(float, float, float);
 	bool Collide(Object*);
 	void UpdatePosition();
+	void DrawSelf();
 };
 
 Object::Object(ObjectList *obj_list) {
@@ -83,4 +89,8 @@ void Object::UpdatePosition() {
 	float new_z = position.z + velocity.z;
 
 	// Loop for check
+}
+
+void Object::DrawSelf() {
+	
 }
