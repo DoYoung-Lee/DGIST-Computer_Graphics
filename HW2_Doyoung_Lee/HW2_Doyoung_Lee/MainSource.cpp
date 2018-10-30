@@ -34,11 +34,12 @@ struct Object {
 	int n_vertices;
 };
 
+
 static void CreateVertexBuffer() {
 	glCreateVertexArrays(1, &vertex_array_obj);
 	glBindVertexArray(vertex_array_obj);
 
-	float vertices[]{
+	std::vector<float> vertices {
 		0.0f, 0.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
 		1.0f, 1.0f, 0.0f,
@@ -51,24 +52,24 @@ static void CreateVertexBuffer() {
 	
 	glGenBuffers(1, &vertexbuffer_obj);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer_obj);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW); // float array case
-	// glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW); // float vector case
+	// glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW); // float array case
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW); // float vector case
 
-	float colors[] = {
-		1.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 1.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f,
+	std::vector<float> colors {
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
 	};
 	glGenBuffers(1, &colorbuffer_obj);
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer_obj);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), &colors[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(float), &colors[0], GL_STATIC_DRAW);
 
-	unsigned int indices[] = {
+	std::vector<unsigned int> indices {
 		0, 1, 3,
 		0, 3, 4,
 		0, 4, 1,
@@ -85,7 +86,7 @@ static void CreateVertexBuffer() {
 
 	glGenBuffers(1, &indexbufer_obj);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexbufer_obj);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 }
 
 static void InitAnimObjects() {

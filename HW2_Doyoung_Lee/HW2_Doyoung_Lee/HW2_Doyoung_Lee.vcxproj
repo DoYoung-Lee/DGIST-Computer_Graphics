@@ -127,8 +127,8 @@
     <None Include="vertex_shader_3d.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimObjectFunc.cpp" />
     <ClCompile Include="TimerFunc.cpp" />
-    <ClCompile Include="VertexFunc.cpp" />
     <ClCompile Include="FileFunc.cpp" />
     <ClCompile Include="MainSource.cpp" />
     <ClCompile Include="UserInputFunc.cpp" />
@@ -137,7 +137,6 @@
     <ClInclude Include="FileFunc.h" />
     <ClInclude Include="TimerFunc.h" />
     <ClInclude Include="UserInputFunc.h" />
-    <ClInclude Include="VertexFunc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
