@@ -38,10 +38,10 @@
     <ClCompile Include="UserInputFunc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TimerFunc.cpp">
+    <ClCompile Include="AnimObjectFunc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="AnimObjectFunc.cpp">
+    <ClCompile Include="VertexBufferFunc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -52,10 +52,10 @@
     <ClInclude Include="UserInputFunc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TimerFunc.h">
+    <ClInclude Include="AnimObjectFunc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="AnimObjectFunc.h">
+    <ClInclude Include="VertexBufferFunc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -13,12 +13,6 @@
 #include <iostream>
 #include <sstream>
 
-#include <GL/glew.h>
-#include <GL/freeglut.h>
-#include <glm/glm.hpp>
-
-
-
 std::string ReadShader(const char* pFileName) {
 	std::string outFile;
 
@@ -35,11 +29,11 @@ std::string ReadShader(const char* pFileName) {
 	return outFile;
 }
 
-void InitShaders(GLuint &shader_program, const char* path_vertex_shader, const char* path_fragment_shader) {
+void InitShaders(GLuint *shader_program, const char* path_vertex_shader, const char* path_fragment_shader) {
 	GLint success;
 	GLchar error_log[1024];
 
-	shader_program = glCreateProgram();
+	*shader_program = glCreateProgram();
 	if (shader_program == 0) {
 		std::cerr << "Error creating shader program" << std::endl;
 		exit(1);
@@ -73,26 +67,26 @@ void InitShaders(GLuint &shader_program, const char* path_vertex_shader, const c
 		exit(1);
 	}
 
-	glAttachShader(shader_program, vertex_shader_obj);
-	glAttachShader(shader_program, frag_shader_obj);
+	glAttachShader(*shader_program, vertex_shader_obj);
+	glAttachShader(*shader_program, frag_shader_obj);
 
-	glLinkProgram(shader_program);
-	glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
+	glLinkProgram(*shader_program);
+	glGetProgramiv(*shader_program, GL_LINK_STATUS, &success);
 	if (!success) {
-		glGetProgramInfoLog(shader_program, sizeof(error_log), NULL, error_log);
+		glGetProgramInfoLog(*shader_program, sizeof(error_log), NULL, error_log);
 		std::cerr << "Error linking shader program: " << error_log << std::endl;
 		exit(1);
 	}
 
-	glValidateProgram(shader_program);
-	glGetProgramiv(shader_program, GL_VALIDATE_STATUS, &success);
+	glValidateProgram(*shader_program);
+	glGetProgramiv(*shader_program, GL_VALIDATE_STATUS, &success);
 	if (!success) {
-		glGetProgramInfoLog(shader_program, sizeof(error_log), NULL, error_log);
+		glGetProgramInfoLog(*shader_program, sizeof(error_log), NULL, error_log);
 		std::cerr << "Invalid shader program: " << error_log << std::endl;
 		exit(1);
 	}
 
-	glUseProgram(shader_program);
+	glUseProgram(*shader_program);
 }
 
 /* OBJ loader is not finished

@@ -128,16 +128,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimObjectFunc.cpp" />
-    <ClCompile Include="TimerFunc.cpp" />
     <ClCompile Include="FileFunc.cpp" />
     <ClCompile Include="MainSource.cpp" />
     <ClCompile Include="UserInputFunc.cpp" />
+    <ClCompile Include="VertexBufferFunc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimObjectFunc.h" />
     <ClInclude Include="FileFunc.h" />
-    <ClInclude Include="TimerFunc.h" />
     <ClInclude Include="UserInputFunc.h" />
+    <ClInclude Include="VertexBufferFunc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
