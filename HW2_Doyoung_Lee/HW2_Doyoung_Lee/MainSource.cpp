@@ -85,10 +85,6 @@ static void CreateVertexBuffer() {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_obj.size() * sizeof(unsigned int), &indices_obj[0], GL_STATIC_DRAW);
 }
 
-static void InitAnimObjects() {
-
-}
-
 static void RenderScene2DCB() { // legacy code for 2d drawing
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -186,7 +182,6 @@ int main(int argc, char** argv) {
 	}
 	InitShaders(shader_program, "vertex_shader_3d.glsl", "frag_shader_3d.glsl");
 	CreateVertexBuffer(); // Create vertex buffer using vertice data
-	InitAnimObjects(); // Initialize animation objects
 	glutMainLoop();
 
 	return 0;

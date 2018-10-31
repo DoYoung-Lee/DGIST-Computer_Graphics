@@ -134,6 +134,7 @@
     <ClCompile Include="UserInputFunc.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimObjectFunc.h" />
     <ClInclude Include="FileFunc.h" />
     <ClInclude Include="TimerFunc.h" />
     <ClInclude Include="UserInputFunc.h" />

@@ -10,21 +10,9 @@
 #include <vector>
 #include <algorithm>
 
-// ----------- ----------- ----------- ----------- -----------
-class Object;
+#include "AnimObjectFunc.h"
 
-class ObjectList {
-private:
-	std::vector<Object*> list; // Store address of the first element of each object
-	int n_objects;
-	int vertex_list_index;
-public:
-	ObjectList();
-	void CreateObject(Object*);
-	void DestroyObject(Object*);
-	void DrawObjects();
-	void StepObjects();
-};
+// ----------- ----------- ----------- ----------- -----------
 
 ObjectList::ObjectList() {
 	n_objects = 0;
@@ -41,30 +29,23 @@ void ObjectList::DestroyObject(Object *target_obj) {
 	n_objects -= 1;
 }
 
-void ObjectList::DrawObjects() {
-
+void ObjectList::StepObjects() {
+	std::vector<Object*>::iterator iter = list.begin();
+	while (iter != list.end()) {
+		(*iter)->StepSelf();
+		iter++;
+	}
 }
 
-void ObjectList::StepObjects() {
-	
+void ObjectList::DrawObjects() {
+	std::vector<Object*>::iterator iter = list.begin();
+	while (iter != list.end()) {
+		(*iter)->DrawSelf();
+		iter++;
+	}
 }
 
 // ----------- ----------- ----------- ----------- -----------
-
-class Object {
-private:
-	glm::vec3 position;
-	glm::vec3 velocity;
-	int n_vertices;
-	int vertex_base_index;
-public:
-	Object(ObjectList*);
-	float GetPosition();
-	void SetPosition(float, float, float);
-	bool Collide(Object*);
-	void UpdatePosition();
-	void DrawSelf();
-};
 
 Object::Object(ObjectList *obj_list) {
 	(*obj_list).CreateObject(this);
@@ -94,6 +75,10 @@ void Object::UpdatePosition() {
 	float new_z = position.z + velocity.z;
 
 	// Loop for check
+}
+
+void Object::StepSelf() {
+
 }
 
 void Object::DrawSelf() {
