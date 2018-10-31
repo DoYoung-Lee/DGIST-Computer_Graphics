@@ -20,7 +20,5 @@ std::vector<unsigned int> indices_obj;
 void DoInitShader();
 void InitObjectsVertex();
 static void CreateVertexBuffer();
-static void RenderScene2DCB();
-static void RenderScene3DCB();
 
 #endif
