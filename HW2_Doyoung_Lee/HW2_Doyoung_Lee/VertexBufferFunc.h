@@ -6,7 +6,7 @@
 #include <GL/freeglut.h>
 #include <glm/glm.hpp>
 
-GLuint shader_program;
+extern GLuint shader_program;
 
 GLuint vertex_array_obj;
 GLuint vertexbuffer_obj;
@@ -17,8 +17,10 @@ std::vector<glm::vec3> vertices_obj;
 std::vector<glm::vec3> colors_obj;
 std::vector<unsigned int> indices_obj;
 
-void DoInitShader();
+void DoInitShader(GLuint*);
+void RenderScene2DCB();
+void RenderScene3DCB();
 void InitObjectsVertex();
-static void CreateVertexBuffer();
+void CreateVertexBuffer();
 
 #endif
