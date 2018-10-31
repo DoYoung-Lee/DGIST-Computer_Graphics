@@ -23,6 +23,7 @@ public:
 	void CreateObject(Object*);
 	void DestroyObject(Object*);
 	void DrawObjects();
+	void StepObjects();
 };
 
 ObjectList::ObjectList() {
@@ -42,6 +43,10 @@ void ObjectList::DestroyObject(Object *target_obj) {
 
 void ObjectList::DrawObjects() {
 
+}
+
+void ObjectList::StepObjects() {
+	
 }
 
 // ----------- ----------- ----------- ----------- -----------
