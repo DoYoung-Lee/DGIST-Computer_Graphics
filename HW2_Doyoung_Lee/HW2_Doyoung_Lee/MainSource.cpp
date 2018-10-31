@@ -3,8 +3,8 @@
 	main reference is lecture note provided by Sunghyun Cho, ICE, DGIST.
    -------------------------------- */
 
-#include "UserInputFunc.h"
 #include "VertexBufferFunc.h"
+#include "UserInputFunc.h"
 
 #include <fstream>
 #include <string>
@@ -17,6 +17,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 GLuint shader_program;
+
+GLuint vertex_array_obj;
+GLuint vertexbuffer_obj;
+GLuint colorbuffer_obj;
+GLuint indexbufer_obj;
+
+std::vector<glm::vec3> vertices_obj;
+std::vector<glm::vec3> colors_obj;
+std::vector<unsigned int> indices_obj;
 
 bool alarms[2] = {true, true};
 
