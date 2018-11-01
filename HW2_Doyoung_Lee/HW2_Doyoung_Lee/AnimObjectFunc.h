@@ -33,7 +33,7 @@ private:
 public:
 	Object();
 	void SetModel(int, int);
-	float GetPosition();
+	glm::vec3 GetPosition();
 	void SetPosition(glm::vec3);
 	void SetVelocity(glm::vec3);
 	bool Collide(Object*);

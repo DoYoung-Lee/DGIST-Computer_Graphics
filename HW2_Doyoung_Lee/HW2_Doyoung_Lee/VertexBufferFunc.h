@@ -11,7 +11,7 @@ extern GLuint shader_program;
 extern GLuint vertex_array_obj;
 extern GLuint vertexbuffer_obj;
 extern GLuint colorbuffer_obj;
-extern GLuint indexbufer_obj;
+extern GLuint indexbuffer_obj;
 
 extern std::vector<glm::vec3> vertices_obj;
 extern std::vector<glm::vec3> colors_obj;

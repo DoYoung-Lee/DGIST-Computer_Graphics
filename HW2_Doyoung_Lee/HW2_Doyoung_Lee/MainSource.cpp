@@ -22,7 +22,7 @@ GLuint shader_program;
 GLuint vertex_array_obj;
 GLuint vertexbuffer_obj;
 GLuint colorbuffer_obj;
-GLuint indexbufer_obj;
+GLuint indexbuffer_obj;
 
 std::vector<glm::vec3> vertices_obj;
 std::vector<glm::vec3> colors_obj;
@@ -40,16 +40,42 @@ void CreateMVP() {
 	// Make model view matrix
 	GLint matrix_loc = glGetUniformLocation(shader_program, "MVP");
 
+	glm::vec3 mvp_camera;
+	glm::vec3 mvp_focus;
+	glm::vec3 mvp_up;
+	float mvp_near;
+	float mvp_far;
+
 	switch (modelview_index)
 	{
+	case 1:
+		mvp_camera = player_obj->GetPosition();
+		mvp_focus = {mvp_camera.x + 1, mvp_camera.y, mvp_camera.z}; // Specific coordination is not calculated.
+		mvp_up = { mvp_camera.x, mvp_camera.y + 1, mvp_camera.z };
+		mvp_near = 0.1f;
+		mvp_far = 100.0f;
+		break;
+	case 2:
+		mvp_camera = { 0, 10, 0 };
+		mvp_focus = { 0, 0, 0 };
+		mvp_up = { 1, 0, 0 };
+		mvp_near = 0.1f;
+		mvp_far = 100.0f;
+		break;
 	default:
+		mvp_camera = { 4, 4, -3 };
+		mvp_focus = { 0, 0, 0 };
+		mvp_up = { 0, 1, 0 };
+		mvp_near = 0.1f;
+		mvp_far = 100.0f;
 		break;
 	}
-	glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f); // glm::perspective is member of matrix_transform.hpp
+
+	glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, mvp_near, mvp_far); // glm::perspective is member of matrix_transform.hpp
 	glm::mat4 view = glm::lookAt(
-		glm::vec3(4, 3, -3), // Camera
-		glm::vec3(0, 0, 0), // Focus
-		glm::vec3(0, 1, 0) // Up
+		mvp_camera,
+		mvp_focus,
+		mvp_up
 	);
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 MVP = projection * view * model;
@@ -73,9 +99,7 @@ void RenderSceneObjCB() {
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer_obj);
 	glVertexAttribPointer(color_loc, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	// Scale object
-	GLint scale_loc = glGetUniformLocation(shader_program, "Scale");
-	glUniform1f(scale_loc, 0.5f);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexbuffer_obj);
 
 	// Draw each objects
 	glEnable(GL_DEPTH_TEST);
@@ -90,7 +114,8 @@ void RenderSceneObjCB() {
 
 void TimerCallBack(int) {
 	// Update speed of player
-	glm::vec3 speed = { 0.1*move_axis[0], 0.1*move_axis[1], 0 };
+	
+	glm::vec3 speed = { 0.1*move_axis[0], 0, 0.1*move_axis[1]};
 	player_obj->SetVelocity(speed);
 
 	room.StepObjects();

@@ -51,8 +51,8 @@ void Object::SetModel(int model_indices, int model_base_index) {
 	vertex_base_index = model_base_index;
 }
 
-float Object::GetPosition() {
-	return position.x, position.y, position.z;
+glm::vec3 Object::GetPosition() {
+	return position;
 }
 
 void Object::SetPosition(glm::vec3 new_position) {
@@ -64,7 +64,7 @@ void Object::SetVelocity(glm::vec3 new_velocity) {
 }
 
 bool Object::Collide(Object* target_obj) {
-	bool is_x_collide = false; //target_obj->position.x;
+	bool is_x_collide = false; // target_obj->position.x;
 	bool is_y_collide = false;
 	bool is_z_collide = false;
 
@@ -90,12 +90,15 @@ void Object::DrawSelf() {
 	GLint x_loc = glGetUniformLocation(shader_program, "x");
 	GLint y_loc = glGetUniformLocation(shader_program, "y");
 	GLint z_loc = glGetUniformLocation(shader_program, "z");
+	GLint scale_loc = glGetUniformLocation(shader_program, "Scale");
 
 	glUniform1f(x_loc, position.x);
 	glUniform1f(y_loc, position.y);
 	glUniform1f(z_loc, position.z);
-
-	glDrawElements(GL_TRIANGLES, 3 * n_indices, GL_UNSIGNED_INT, 0);
+	glUniform1f(scale_loc, 0.5f);
+	
+	//glDrawElementsBaseVertex(GL_TRIANGLES, 3 * n_indices, GL_UNSIGNED_INT, 0, vertex_base_index);
+	glDrawElements(GL_TRIANGLES, 3 * n_indices, GL_UNSIGNED_INT, reinterpret_cast<void*> (vertex_base_index * sizeof(glm::vec3)));
 }
 
 // ----------- ----------- ----------- ----------- -----------
@@ -105,8 +108,8 @@ Object* InitObject(ObjectList* target_obj_list) {
 	Object* temp_obj = new Object;
 	(*target_obj_list).CreateObject(temp_obj);
 	temp_obj->SetPosition({ 0.5, 0.5, 0.5 });
-	temp_obj->SetVelocity({ 0.1, 0, 0 });
-	temp_obj->SetModel(12, 0);
+	temp_obj->SetVelocity({ 0.01, 0, 0 });
+	temp_obj->SetModel(12, 12);
 
 	// fill grass
 

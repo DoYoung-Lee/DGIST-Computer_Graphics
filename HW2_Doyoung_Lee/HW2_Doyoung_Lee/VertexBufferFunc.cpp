@@ -1,3 +1,10 @@
+/* --------------------------------
+	References:
+	"http://www.opengl-tutorial.org/kr/intermediate-tutorials/tutorial-9-vbo-indexing/" to implement indexed VBO
+   -------------------------------- */
+
+
+
 #include "VertexBufferFunc.h"
 #include "FileFunc.h"
 
@@ -17,17 +24,33 @@ void InitObjectsVertex() {
 		{ 1.0f, 0.0f, 1.0f },
 		{ 1.0f, 1.0f, 1.0f },
 		{ 0.0f, 1.0f, 1.0f },
+		{ 0.0f, 0.0f, 0.0f },
+		{ 1.0f, 0.0f, 0.0f },
+		{ 1.0f, 1.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f },
+		{ 0.0f, 0.0f, 1.0f },
+		{ 1.0f, 0.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f },
+		{ 0.0f, 1.0f, 1.0f },
 	};
 	
 	colors_obj = {
-		{ 1.0f, 1.0f, 1.0f },
-		{ 1.0f, 1.0f, 1.0f },
-		{ 1.0f, 1.0f, 1.0f },
-		{ 1.0f, 1.0f, 1.0f },
-		{ 1.0f, 1.0f, 1.0f },
-		{ 1.0f, 1.0f, 1.0f },
-		{ 1.0f, 1.0f, 1.0f },
-		{ 1.0f, 1.0f, 1.0f },
+		{ 1.0f, 0.0f, 0.0f },
+		{ 1.0f, 0.0f, 0.0f },
+		{ 1.0f, 0.0f, 0.0f },
+		{ 1.0f, 0.0f, 0.0f },
+		{ 1.0f, 0.0f, 0.0f },
+		{ 1.0f, 0.0f, 0.0f },
+		{ 1.0f, 0.0f, 0.0f },
+		{ 1.0f, 0.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f },
 	};
 	
 	indices_obj = {
@@ -43,6 +66,18 @@ void InitObjectsVertex() {
 		7, 3, 4,
 		7, 4, 6,
 		7, 6, 3, // Cube 1 end
+		8, 9, 11, // Cube 2 begin
+		8, 11, 12,
+		8, 12, 9,
+		10, 9, 11,
+		10, 11, 14,
+		10, 14, 9,
+		13, 9, 12,
+		13, 12, 14,
+		13, 14, 9,
+		15, 11, 12,
+		15, 12, 14,
+		15, 14, 11, // Cube 2 end
 	};
 }
 
@@ -136,7 +171,7 @@ void CreateVertexBuffer() {
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer_obj);
 	glBufferData(GL_ARRAY_BUFFER, colors_obj.size() * sizeof(glm::vec3), &colors_obj[0], GL_STATIC_DRAW);
 
-	glGenBuffers(1, &indexbufer_obj);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexbufer_obj);
+	glGenBuffers(1, &indexbuffer_obj);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexbuffer_obj);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_obj.size() * sizeof(unsigned int), &indices_obj[0], GL_STATIC_DRAW);
 }
