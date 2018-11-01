@@ -24,54 +24,43 @@ GLuint vertexbuffer_obj;
 GLuint colorbuffer_obj;
 GLuint indexbufer_obj;
 
-ObjectList room;
-
 std::vector<glm::vec3> vertices_obj;
 std::vector<glm::vec3> colors_obj;
 std::vector<unsigned int> indices_obj;
 
+int move_axis[2] = { 0, 0 };
+int modelview_index = 0;
+
+ObjectList room;
+Object* player_obj;
+
 bool alarms[2] = {true, true};
 
-void InitObject() {
-	// fill grass
+void CreateMVP() {
+	// Make model view matrix
+	GLint matrix_loc = glGetUniformLocation(shader_program, "MVP");
 
-	// create tree on the road
+	switch (modelview_index)
+	{
+	default:
+		break;
+	}
+	glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f); // glm::perspective is member of matrix_transform.hpp
+	glm::mat4 view = glm::lookAt(
+		glm::vec3(4, 3, -3), // Camera
+		glm::vec3(0, 0, 0), // Focus
+		glm::vec3(0, 1, 0) // Up
+	);
+	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 MVP = projection * view * model;
 
-	// fill road
-
-	// create car on the road
-
-	// build wall
-
-	// create player marker
-	Object* player = new Object;
-	room.CreateObject(player);
-	player->SetPosition({ 0, 0, 0 });
-	player->SetVelocity({ 0, 0, 0 });
-	player->SetModel(12, 0);
-
-	Object* player2 = new Object;
-	room.CreateObject(player2);
-	player2->SetPosition({ 0.5, 0.5, 0.5 });
-	player2->SetVelocity({ 0.1, 0, 0 });
-	player2->SetModel(12, 0);
+	glUniformMatrix4fv(matrix_loc, 1, GL_FALSE, &MVP[0][0]);
 }
 
 void RenderSceneObjCB() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Make model view matrix
-	GLint matrix_loc = glGetUniformLocation(shader_program, "MVP");
-	glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f); // glm::perspective is member of matrix_transform.hpp
-	glm::mat4 view = glm::lookAt(
-		glm::vec3(4, 3, -3),
-		glm::vec3(0, 0, 0),
-		glm::vec3(0, 1, 0)
-	);
-	glm::mat4 model = glm::mat4(1.0f);
-	glm::mat4 MVP = projection * view * model;
-	glUniformMatrix4fv(matrix_loc, 1, GL_FALSE, &MVP[0][0]);
-
+	CreateMVP();
 	// 1st attribute buffer: vertices
 	GLint position_loc = glGetAttribLocation(shader_program, "Position");
 	glEnableVertexAttribArray(position_loc);
@@ -88,6 +77,7 @@ void RenderSceneObjCB() {
 	GLint scale_loc = glGetUniformLocation(shader_program, "Scale");
 	glUniform1f(scale_loc, 0.5f);
 
+	// Draw each objects
 	glEnable(GL_DEPTH_TEST);
 	room.DrawObjects();
 	glDisable(GL_DEPTH_TEST);
@@ -99,6 +89,10 @@ void RenderSceneObjCB() {
 }
 
 void TimerCallBack(int) {
+	// Update speed of player
+	glm::vec3 speed = { 0.1*move_axis[0], 0.1*move_axis[1], 0 };
+	player_obj->SetVelocity(speed);
+
 	room.StepObjects();
 
 	glutTimerFunc(33, TimerCallBack, 0);
@@ -131,7 +125,7 @@ int main(int argc, char** argv) {
 	}
 	DoInitShader(&shader_program);
 	CreateVertexBuffer(); // Create vertex buffer using vertice data
-	InitObject();
+	player_obj = InitObject(&room);
 	glutMainLoop();
 
 	return 0;

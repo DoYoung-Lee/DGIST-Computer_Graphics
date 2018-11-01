@@ -42,4 +42,6 @@ public:
 	void DrawSelf();
 };
 
+Object* InitObject(ObjectList*);
+
 #endif

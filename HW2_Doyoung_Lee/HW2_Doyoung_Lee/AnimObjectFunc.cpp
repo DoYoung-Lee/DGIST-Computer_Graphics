@@ -99,3 +99,31 @@ void Object::DrawSelf() {
 }
 
 // ----------- ----------- ----------- ----------- -----------
+
+Object* InitObject(ObjectList* target_obj_list) {
+
+	Object* temp_obj = new Object;
+	(*target_obj_list).CreateObject(temp_obj);
+	temp_obj->SetPosition({ 0.5, 0.5, 0.5 });
+	temp_obj->SetVelocity({ 0.1, 0, 0 });
+	temp_obj->SetModel(12, 0);
+
+	// fill grass
+
+	// create tree on the road
+
+	// fill road
+
+	// create car on the road
+
+	// build wall
+
+	// create player marker
+	Object* player = new Object;
+	(*target_obj_list).CreateObject(player);
+	player->SetPosition({ 0, 0, 0 });
+	player->SetVelocity({ 0, 0, 0 });
+	player->SetModel(12, 0);
+
+	return player;
+}
