@@ -1,6 +1,14 @@
 #ifndef ANIM_OBJ_FUNC_H
 #define ANIM_OBJ_FUNC_H
 
+#include <GL/glew.h>
+#include <gl/freeglut.h>
+#include <glm/glm.hpp>
+
+#include <vector>
+
+extern GLuint shader_program;
+
 class Object;
 
 class ObjectList {
@@ -31,5 +39,7 @@ public:
 	void StepSelf();
 	void DrawSelf();
 };
+
+void InitObject();
 
 #endif

@@ -3,14 +3,8 @@
 	Referenced Jinwoo Yu's computer graphics assignment 1 to make Object class.
    -------------------------------- */
 
-#include <GL/glew.h>
-#include <gl/freeglut.h>
-#include <glm/glm.hpp>
-
-#include <vector>
-#include <algorithm>
-
 #include "AnimObjectFunc.h"
+#include <algorithm>
 
 // ----------- ----------- ----------- ----------- -----------
 
@@ -82,5 +76,23 @@ void Object::StepSelf() {
 }
 
 void Object::DrawSelf() {
-	
+	GLint x_loc = glGetUniformLocation(shader_program, "x");
+	glDrawElements(GL_TRIANGLES, 3 * n_vertices, GL_UNSIGNED_INT, 0);
+}
+
+// ----------- ----------- ----------- ----------- -----------
+
+void InitObject() {
+	// fill grass
+
+	// create tree on the road
+
+	// fill road
+
+	// create car on the road
+
+	// build wall
+
+	// create player marker
+
 }

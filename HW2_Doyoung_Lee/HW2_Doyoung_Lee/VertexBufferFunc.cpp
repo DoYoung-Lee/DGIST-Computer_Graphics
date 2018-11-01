@@ -76,7 +76,7 @@ void RenderScene2DCB() { // legacy code for 2d drawing
 	glutSwapBuffers();
 }
 
-void RenderScene3DCB() {
+void RenderScene3DCB() { // legacy code for simple 3d rendering
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Make model view matrix

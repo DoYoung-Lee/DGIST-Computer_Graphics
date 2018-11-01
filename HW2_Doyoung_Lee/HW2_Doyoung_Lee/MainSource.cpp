@@ -5,6 +5,7 @@
 
 #include "VertexBufferFunc.h"
 #include "UserInputFunc.h"
+#include "AnimObjectFunc.h"
 
 #include <fstream>
 #include <string>
@@ -23,11 +24,21 @@ GLuint vertexbuffer_obj;
 GLuint colorbuffer_obj;
 GLuint indexbufer_obj;
 
+ObjectList room;
+
 std::vector<glm::vec3> vertices_obj;
 std::vector<glm::vec3> colors_obj;
 std::vector<unsigned int> indices_obj;
 
 bool alarms[2] = {true, true};
+
+void RenderSceneObjCB() {
+
+
+	room.DrawObjects();
+
+	glutSwapBuffers();
+}
 
 void TimerCallBack(int) {
 
@@ -61,6 +72,7 @@ int main(int argc, char** argv) {
 	}
 	DoInitShader(&shader_program);
 	CreateVertexBuffer(); // Create vertex buffer using vertice data
+	InitObject();
 	glutMainLoop();
 
 	return 0;
