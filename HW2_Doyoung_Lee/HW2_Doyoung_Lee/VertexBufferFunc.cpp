@@ -8,24 +8,28 @@ void DoInitShader(GLuint *shader_program) {
 }
 
 void InitObjectsVertex() {
-	vertices_obj.push_back({ 0.0f, 0.0f, 0.0f });
-	vertices_obj.push_back({ 1.0f, 0.0f, 0.0f });
-	vertices_obj.push_back({ 1.0f, 1.0f, 0.0f });
-	vertices_obj.push_back({ 0.0f, 1.0f, 0.0f });
-	vertices_obj.push_back({ 0.0f, 0.0f, 1.0f });
-	vertices_obj.push_back({ 1.0f, 0.0f, 1.0f });
-	vertices_obj.push_back({ 1.0f, 1.0f, 1.0f });
-	vertices_obj.push_back({ 0.0f, 1.0f, 1.0f });
-
-	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
-	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
-	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
-	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
-	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
-	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
-	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
-	colors_obj.push_back({ 1.0f, 1.0f, 1.0f });
-
+	vertices_obj = {
+		{ 0.0f, 0.0f, 0.0f },
+		{ 1.0f, 0.0f, 0.0f },
+		{ 1.0f, 1.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f },
+		{ 0.0f, 0.0f, 1.0f },
+		{ 1.0f, 0.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f },
+		{ 0.0f, 1.0f, 1.0f },
+	};
+	
+	colors_obj = {
+		{ 1.0f, 1.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f },
+	};
+	
 	indices_obj = {
 		0, 1, 3, // Cube 1 begin
 		0, 3, 4,

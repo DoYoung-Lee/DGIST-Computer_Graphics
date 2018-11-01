@@ -28,18 +28,18 @@ class Object {
 private:
 	glm::vec3 position;
 	glm::vec3 velocity;
-	int n_vertices;
+	int n_indices;
 	int vertex_base_index;
 public:
-	Object(ObjectList*);
+	Object();
+	void SetModel(int, int);
 	float GetPosition();
-	void SetPosition(float, float, float);
+	void SetPosition(glm::vec3);
+	void SetVelocity(glm::vec3);
 	bool Collide(Object*);
 	void UpdatePosition();
 	void StepSelf();
 	void DrawSelf();
 };
-
-void InitObject();
 
 #endif
