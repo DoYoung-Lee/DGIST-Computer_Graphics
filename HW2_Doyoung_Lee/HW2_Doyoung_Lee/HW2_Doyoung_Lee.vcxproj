@@ -139,14 +139,6 @@
     <ClInclude Include="UserInputFunc.h" />
     <ClInclude Include="VertexBufferFunc.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Object Include="object\policecar\police_car.obj">
-      <FileType>Document</FileType>
-    </Object>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="object\policecar\police_car.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

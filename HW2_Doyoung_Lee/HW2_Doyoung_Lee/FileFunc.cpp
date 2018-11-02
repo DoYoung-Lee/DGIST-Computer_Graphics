@@ -87,10 +87,9 @@ void InitShaders(GLuint *shader_program, const char* path_vertex_shader, const c
 	glUseProgram(*shader_program);
 }
 
-bool ObjLoader(const char* path, std::vector<glm::vec3> *out_vertices, std::vector<glm::vec3> *out_colors, std::vector<unsigned int> *out_vertex_indices) {
+bool ObjLoader(const char* path, std::vector<glm::vec3> *out_vertices, std::vector<glm::vec3> *out_colors, std::vector<unsigned int> *out_vertex_indices, int vertex_index_base) {
 	std::ifstream obj_file(path);
 	std::string line_string;
-	int model[2] = { 0, 0 }; // n_vertice, n_indices
 
 	while (std::getline(obj_file, line_string)) {
 		std::istringstream line_stream(line_string);
@@ -102,7 +101,6 @@ bool ObjLoader(const char* path, std::vector<glm::vec3> *out_vertices, std::vect
 			line_stream >> x >> y >> z;
 			(*out_vertices).push_back(glm::vec3(x, y, z));
 			(*out_colors).push_back(glm::vec3(0.4f, 0.4f, 0.4f));
-			model[0] += 3;
 		}
 		else if (line_type == "f") {
 			unsigned int vertex_index, uv_index, normal_index;
@@ -114,10 +112,9 @@ bool ObjLoader(const char* path, std::vector<glm::vec3> *out_vertices, std::vect
 				std::getline(ref_stream, v_string, '/');
 				std::getline(ref_stream, vn_string, '/');
 				std::getline(ref_stream, vt_string, '/');
-				vertex_index = atoi(v_string.c_str());
-				out_vertex_indices->push_back(vertex_index);
+				vertex_index = atoi(v_string.c_str()) + vertex_index_base - 1;
+				(*out_vertex_indices).push_back(vertex_index);
 			}
-			model[1] += 1;
 		}
 	}
 	return true;

@@ -31,12 +31,14 @@ private:
 	glm::vec3 position;
 	glm::vec3 velocity;
 	glm::vec3 collision_mask;
+	int scale;
 	int n_indices;
 	int vertex_base_index;
+	bool wireframe;
 public:
 	Object();
 	Object(glm::vec3, int, int);
-	void SetModel(int, int);
+	void SetModel(int, int, bool, float);
 	glm::vec3 GetPosition();
 	void SetPosition(glm::vec3);
 	void SetVelocity(glm::vec3);

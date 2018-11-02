@@ -59,14 +59,4 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <Object Include="object\policecar\police_car.obj">
-      <Filter>리소스 파일</Filter>
-    </Object>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="object\policecar\police_car.txt">
-      <Filter>리소스 파일</Filter>
-    </Text>
-  </ItemGroup>
 </Project>

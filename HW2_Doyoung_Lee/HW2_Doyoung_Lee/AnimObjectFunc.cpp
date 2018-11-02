@@ -47,6 +47,8 @@ Object::Object() {
 	collision_mask = { 0, 0, 0 };
 	n_indices = 0;
 	vertex_base_index = 0;
+	scale = 0;
+	wireframe = false;
 }
 
 Object::Object(glm::vec3 init_pos, int init_n_indices, int init_vbi) {
@@ -55,11 +57,15 @@ Object::Object(glm::vec3 init_pos, int init_n_indices, int init_vbi) {
 	collision_mask = { 0, 0, 0 };
 	n_indices = init_n_indices;
 	vertex_base_index = init_vbi;
+	wireframe = false;
+	scale = 1.0f;
 }
 
-void Object::SetModel(int model_indices, int model_base_index) {
+void Object::SetModel(int model_indices, int model_base_index, bool model_wireframe = false, float model_scale = 1.0f) {
 	n_indices = model_indices;
 	vertex_base_index = model_base_index;
+	wireframe = model_wireframe;
+	scale = model_scale;
 }
 
 glm::vec3 Object::GetPosition() {
@@ -105,23 +111,31 @@ void Object::DrawSelf() {
 	GLint x_loc = glGetUniformLocation(shader_program, "x");
 	GLint y_loc = glGetUniformLocation(shader_program, "y");
 	GLint z_loc = glGetUniformLocation(shader_program, "z");
-//	GLint scale_loc = glGetUniformLocation(shader_program, "Scale");
-
+	GLint scale_loc = glGetUniformLocation(shader_program, "Scale");
+	
 	glUniform1f(x_loc, position.x);
 	glUniform1f(y_loc, position.y);
 	glUniform1f(z_loc, position.z);
-//	glUniform1f(scale_loc, 1.0f);
+	glUniform1f(scale_loc, scale);
 
-	//glDrawElementsBaseVertex(GL_TRIANGLES, 3 * n_indices, GL_UNSIGNED_INT, 0, vertex_base_index);
-	glDrawElements(GL_TRIANGLES, 3 * n_indices, GL_UNSIGNED_INT, reinterpret_cast<void*> (vertex_base_index * sizeof(glm::vec3)));
+	if (wireframe) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glDrawElements(GL_TRIANGLES, 3 * n_indices, GL_UNSIGNED_INT, reinterpret_cast<void*> (vertex_base_index * sizeof(glm::vec3)));
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	else {
+		glDrawElements(GL_TRIANGLES, 3 * n_indices, GL_UNSIGNED_INT, reinterpret_cast<void*> (vertex_base_index * sizeof(glm::vec3)));
+	}
+	
 }
 
 // ----------- ----------- ----------- ----------- -----------
 
 Object* InitObject(ObjectList* target_obj_list) {
 	std::srand(std::time(nullptr));
-	Object* temp_obj = new Object({ 2.0f, 0.0f, 2.0f }, 12, 12);
+	Object* temp_obj = new Object({ 2.0f, 0.0f, 2.0f }, 158, 38);
 	(*target_obj_list).CreateObject(temp_obj);
+	temp_obj->SetModel(158, 38, true);
 	
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < room_col; j++) {
