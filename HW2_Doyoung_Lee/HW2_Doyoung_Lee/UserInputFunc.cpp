@@ -15,11 +15,11 @@ void KeyboardCB(unsigned char key, int x, int y) {
 		break;
 	case 'a':
 	case 'A':
-		move_axis[1] = 1;
+		move_axis[1] = -1;
 		break;
 	case 'd':
 	case 'D':
-		move_axis[1] = -1;
+		move_axis[1] = 1;
 		break;
 	case '1':
 		modelview_index = 1; // For first-person view
@@ -29,6 +29,26 @@ void KeyboardCB(unsigned char key, int x, int y) {
 		break;
 	case '3':
 		modelview_index = 3; // For third-person view
+		break;
+	default:
+		break;
+	}
+}
+
+void KeyboardUpCB(unsigned char key, int x, int y) {
+	switch (key)
+	{
+	case 'w':
+	case 'W':
+	case 's':
+	case 'S':
+		move_axis[0] = 0;
+		break;
+	case 'a':
+	case 'A':
+	case 'd':
+	case 'D':
+		move_axis[1] = 0;
 		break;
 	default:
 		break;

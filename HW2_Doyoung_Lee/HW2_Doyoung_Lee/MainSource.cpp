@@ -31,6 +31,9 @@ std::vector<unsigned int> indices_obj;
 int move_axis[2] = { 0, 0 };
 int modelview_index = 0;
 
+int room_row = 10;
+int room_col = 5;
+
 ObjectList room;
 Object* player_obj;
 
@@ -43,28 +46,33 @@ void CreateMVP() {
 	glm::vec3 mvp_camera;
 	glm::vec3 mvp_focus;
 	glm::vec3 mvp_up;
+	mvp_camera = mvp_focus = player_obj->GetPosition();
 	float mvp_near;
 	float mvp_far;
 
 	switch (modelview_index)
 	{
 	case 1:
-		mvp_camera = player_obj->GetPosition();
-		mvp_focus = {mvp_camera.x + 1, mvp_camera.y, mvp_camera.z}; // Specific coordination is not calculated.
-		mvp_up = { mvp_camera.x, mvp_camera.y + 1, mvp_camera.z };
+		mvp_camera.x += 0.5;
+		mvp_camera.y += 0.5;
+		mvp_focus.x += 1;
+		mvp_focus.y = mvp_camera.y;
+		mvp_focus.z = mvp_camera.z;
+		//mvp_focus = {mvp_camera.x + 1, mvp_camera.y, mvp_camera.z};
+		mvp_up = { 0, 1, 0 };
 		mvp_near = 0.1f;
 		mvp_far = 100.0f;
 		break;
 	case 2:
-		mvp_camera = { 0, 10, 0 };
-		mvp_focus = { 0, 0, 0 };
+		mvp_camera.y = 10;
+		mvp_focus.y = 0;
 		mvp_up = { 1, 0, 0 };
 		mvp_near = 0.1f;
 		mvp_far = 100.0f;
 		break;
 	default:
-		mvp_camera = { 4, 4, -3 };
-		mvp_focus = { 0, 0, 0 };
+		mvp_camera.x -= 4;
+		mvp_camera.y += 3;
 		mvp_up = { 0, 1, 0 };
 		mvp_near = 0.1f;
 		mvp_far = 100.0f;
@@ -112,25 +120,30 @@ void RenderSceneObjCB() {
 	glutSwapBuffers();
 }
 
+void AlarmCallBack(int a) {
+	alarms[a] = true;
+}
+
 void TimerCallBack(int) {
 	// Update speed of player
 	
-	glm::vec3 speed = { 0.1*move_axis[0], 0, 0.1*move_axis[1]};
-	player_obj->SetVelocity(speed);
-
+	if (alarms[0] && move_axis) {
+		glm::vec3 speed = { 0.01*move_axis[0], 0, 0.01*move_axis[1] };
+		player_obj->SetVelocity(speed);
+		alarms[0] = false;
+		glutTimerFunc(200, AlarmCallBack, 0);
+	}
+	
 	room.StepObjects();
 
 	glutTimerFunc(33, TimerCallBack, 0);
 	glutPostRedisplay();
 }
 
-void AlarmCallBack(int a) {
-	alarms[a] = true;
-}
-
 static void InitGlutCallbacks(void) {
 	glutDisplayFunc(RenderSceneObjCB);
 	glutKeyboardFunc(KeyboardCB);
+	glutKeyboardUpFunc(KeyboardUpCB);
 	glutSpecialFunc(SpecialCB);
 	glutSpecialUpFunc(SpecialUpCB);
 	glutTimerFunc(33, TimerCallBack, 0);

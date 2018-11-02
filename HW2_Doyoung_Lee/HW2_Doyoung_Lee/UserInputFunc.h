@@ -7,8 +7,9 @@
 extern int move_axis[2];
 extern int modelview_index;
 
-void KeyboardCB(unsigned char key, int x, int y);
-void SpecialCB(int key, int x, int y);
-void SpecialUpCB(int key, int x, int y);
+void KeyboardCB(unsigned char, int, int);
+void KeyboardUpCB(unsigned char, int, int);
+void SpecialCB(int, int, int);
+void SpecialUpCB(int, int, int);
 
 #endif
