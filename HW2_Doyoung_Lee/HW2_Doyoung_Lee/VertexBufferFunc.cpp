@@ -16,14 +16,14 @@ void DoInitShader(GLuint *shader_program) {
 
 void InitObjectsVertex() {
 	vertices_obj = {
-		{ -0.5f, 0.0f, -0.5f }, // Player begin
-		{ 0.5f, 0.0f, -0.5f },
-		{ 0.5f, 1.0f, -0.5f },
-		{ -0.5f, 1.0f, -0.5f },
-		{ -0.5f, 0.0f, 0.5f },
-		{ 0.5f, 0.0f, 0.5f },
-		{ 0.5f, 1.0f, 0.5f },
-		{ -0.5f, 1.0f, 0.5f }, // Player end
+		{ -0.25f, 0.0f, -0.25f }, // Player begin
+		{ 0.25f, 0.0f, -0.25f },
+		{ 0.25f, 0.5f, -0.25f },
+		{ -0.25f, 0.5f, -0.25f },
+		{ -0.25f, 0.0f, 0.25f },
+		{ 0.25f, 0.0f, 0.25f },
+		{ 0.25f, 0.5f, 0.25f },
+		{ -0.25f, 0.5f, 0.25f }, // Player end
 		{ -0.5f, 0.0f, -0.5f }, // Temp obj begin
 		{ 0.5f, 0.0f, -0.5f },
 		{ 0.5f, 1.0f, -0.5f },
@@ -40,10 +40,26 @@ void InitObjectsVertex() {
 		{ 0.5f, 0.0f, -0.5f },
 		{ 0.5f, 0.0f, 0.5f },
 		{ -0.5f, 0.0f, 0.5f }, // Grass end
-		{ -0.5f, 0.0f, -0.5f }, // Road begin
+		{ -0.5f, 0.0f, -0.5f }, // Road tile begin
+		{ -0.1f, 0.0f, -0.5f },
+		{ -0.1f, 0.0f, 0.5f },
+		{ -0.5f, 0.0f, 0.5f },
+		{ -0.1f, 0.0f, -0.2f },
+		{ 0.1f, 0.0f, -0.2f },
+		{ 0.1f, 0.0f, 0.2f },
+		{ -0.1f, 0.0f, 0.2f },
+		{ 0.1f, 0.0f, -0.5f },
 		{ 0.5f, 0.0f, -0.5f },
-		{ 0.5f, 0.0f, 0.5f },
-		{ -0.5f, 0.0f, 0.5f }, // Road end
+		{ 0.5f, 0.0f, 0.5f }, 
+		{ 0.1f, 0.0f, 0.5f },
+		{ -0.1f, 0.0f, -0.5f },
+		{ 0.1f, 0.0f, -0.5f },
+		{ 0.1f, 0.0f, -0.2f },
+		{ -0.1f, 0.0f, -0.2f },
+		{ -0.1f, 0.0f, 0.2f },
+		{ 0.1f, 0.0f, 0.2f },
+		{ 0.1f, 0.0f, 0.5f },
+		{ -0.1f, 0.0f, 0.5f }, // Road tile end
 	};
 	
 	colors_obj = {
@@ -74,7 +90,23 @@ void InitObjectsVertex() {
 		{ 0.1f, 0.1f, 0.1f }, // Road tile begin
 		{ 0.1f, 0.1f, 0.1f },
 		{ 0.1f, 0.1f, 0.1f },
-		{ 0.1f, 0.1f, 0.1f }, // Road tile end
+		{ 0.1f, 0.1f, 0.1f },
+		{ 0.1f, 0.1f, 0.1f },
+		{ 0.1f, 0.1f, 0.1f },
+		{ 0.1f, 0.1f, 0.1f },
+		{ 0.1f, 0.1f, 0.1f },
+		{ 0.1f, 0.1f, 0.1f },
+		{ 0.1f, 0.1f, 0.1f },
+		{ 0.1f, 0.1f, 0.1f },
+		{ 0.1f, 0.1f, 0.1f },
+		{ 0.8f, 0.8f, 0.0f },
+		{ 0.8f, 0.8f, 0.0f },
+		{ 0.8f, 0.8f, 0.0f },
+		{ 0.8f, 0.8f, 0.0f },
+		{ 0.8f, 0.8f, 0.0f },
+		{ 0.8f, 0.8f, 0.0f },
+		{ 0.8f, 0.8f, 0.0f },
+		{ 0.8f, 0.8f, 0.0f }, // Road tile end
 
 	}; 
 	
@@ -105,8 +137,19 @@ void InitObjectsVertex() {
 		15, 14, 11, // Temp obj end (12 ~ 23)
 		16, 17, 18,	18, 19, 16, // Start tile (24 ~ 25)
 		20, 21, 22, 22, 23, 20, // Grass tile (26 ~ 27)
-		24, 25, 26, 26, 27, 24, // Road tile (28 ~ 29)
+		24, 25, 26, // Road tile begin
+		26, 27, 24, 
+		28, 29, 30,
+		30, 31, 28,
+		32, 33, 34,
+		34, 35, 32,
+		36, 37, 38,
+		38, 39, 36,
+		40, 41, 42,
+		42, 43, 40, //Road tile end (28 ~ 37)
 	};
+
+	ObjLoader("object\\policecar\\police_car.txt", &vertices_obj, &colors_obj, &indices_obj);
 }
 
 void RenderScene2DCB() { // legacy code for 2d drawing

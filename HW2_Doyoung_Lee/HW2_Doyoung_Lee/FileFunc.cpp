@@ -7,8 +7,6 @@
 
 #include "FileFunc.h"
 
-#include <vector>
-#include <string>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -89,48 +87,38 @@ void InitShaders(GLuint *shader_program, const char* path_vertex_shader, const c
 	glUseProgram(*shader_program);
 }
 
-/* OBJ loader is not finished
-
-struct int3 {
-	int3(int v, int vt, int vn) : v(v), vt(vt), vn(vn) { }
-	int v, vt, vn;
-};
-
-bool ObjLoader(const char* path, std::vector<glm::vec3> &out_vertices, std::vector<glm::vec2> &out_uvs, std::vector<glm::vec3> &out_normals) {
-	std::vector<unsigned int> vertex_indices, uv_indices, normal_indices;
-	std::vector<glm::vec3> temp_vertices;
-	std::vector<glm::vec2> temp_uvs;
-	std::vector<glm::vec3> temp_normals;
-
+bool ObjLoader(const char* path, std::vector<glm::vec3> *out_vertices, std::vector<glm::vec3> *out_colors, std::vector<unsigned int> *out_vertex_indices) {
 	std::ifstream obj_file(path);
 	std::string line_string;
+	int model[2] = { 0, 0 }; // n_vertice, n_indices
 
 	while (std::getline(obj_file, line_string)) {
 		std::istringstream line_stream(line_string);
 		std::string line_type;
-
+		line_stream >> line_type;
 		// vertex
 		if (line_type == "v") {
 			float x = 0, y = 0, z = 0;
 			line_stream >> x >> y >> z;
-			temp_vertices.push_back(glm::vec3(x, y, z));
-		}
-		else if (line_type == "vt") {
-			float u = 0, v = 0, w = 0;
-			line_stream >> u >> v;
-			temp_uvs.push_back(glm::vec3(u, v, w));
-		}
-		else if (line_type == "vn") {
-			float nx = 0, ny = 0, nz = 0;
-			line_stream >> nx >> ny >> nz;
-			temp_normals.push_back(glm::normalize(glm::vec3(nx, ny, nz)));
+			(*out_vertices).push_back(glm::vec3(x, y, z));
+			(*out_colors).push_back(glm::vec3(0.4f, 0.4f, 0.4f));
+			model[0] += 3;
 		}
 		else if (line_type == "f") {
-			std::vector<int3> refs;
-
-
+			unsigned int vertex_index, uv_index, normal_index;
+			std::string ref_string;
+			for (int i = 0; i < 3; i++) {
+				std::string v_string, vt_string, vn_string;
+				line_stream >> ref_string;
+				std::istringstream ref_stream(ref_string);
+				std::getline(ref_stream, v_string, '/');
+				std::getline(ref_stream, vn_string, '/');
+				std::getline(ref_stream, vt_string, '/');
+				vertex_index = atoi(v_string.c_str());
+				out_vertex_indices->push_back(vertex_index);
+			}
+			model[1] += 1;
 		}
 	}
-	
+	return true;
 }
-*/

@@ -1,6 +1,7 @@
 /* -------------------------------- 
 	References:
 	main reference is lecture note provided by Sunghyun Cho, ICE, DGIST.
+	"http://www.opengl-tutorial.org/kr/beginners-tutorials/tutorial-3-matrices/" to make model view matrix
    -------------------------------- */
 
 #include "VertexBufferFunc.h"
@@ -31,8 +32,10 @@ std::vector<unsigned int> indices_obj;
 int move_axis[2] = { 0, 0 };
 int modelview_index = 0;
 
-int room_row = 10;
-int room_col = 5;
+int room_row = 20;
+int room_col = 9;
+int current_window_width = 640;
+int current_window_height = 480;
 
 ObjectList room;
 Object* player_obj;
@@ -47,8 +50,9 @@ void CreateMVP() {
 	glm::vec3 mvp_focus;
 	glm::vec3 mvp_up;
 	mvp_camera = mvp_focus = player_obj->GetPosition();
-	float mvp_near;
-	float mvp_far;
+	float mvp_near = 0.1f;
+	float mvp_far = 100.0f;
+	glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f); // glm::perspective is member of matrix_transform.hpp
 
 	switch (modelview_index)
 	{
@@ -58,28 +62,23 @@ void CreateMVP() {
 		mvp_focus.x += 1;
 		mvp_focus.y = mvp_camera.y;
 		mvp_focus.z = mvp_camera.z;
-		//mvp_focus = {mvp_camera.x + 1, mvp_camera.y, mvp_camera.z};
 		mvp_up = { 0, 1, 0 };
-		mvp_near = 0.1f;
-		mvp_far = 100.0f;
 		break;
 	case 2:
+		projection = glm::ortho(-current_window_width / 200.0f, current_window_width / 200.0f, -current_window_height / 200.0f, current_window_height / 200.0f, 0.1f, 100.0f);
 		mvp_camera.y = 10;
+		//mvp_camera.z = mvp_focus.z = 0;
 		mvp_focus.y = 0;
 		mvp_up = { 1, 0, 0 };
-		mvp_near = 0.1f;
-		mvp_far = 100.0f;
 		break;
 	default:
 		mvp_camera.x -= 4;
 		mvp_camera.y += 3;
+		mvp_camera.z = room_col / 2.0;
 		mvp_up = { 0, 1, 0 };
-		mvp_near = 0.1f;
-		mvp_far = 100.0f;
 		break;
 	}
 
-	glm::mat4 projection = glm::perspective(45.0f, 4.0f / 3.0f, mvp_near, mvp_far); // glm::perspective is member of matrix_transform.hpp
 	glm::mat4 view = glm::lookAt(
 		mvp_camera,
 		mvp_focus,
@@ -128,7 +127,7 @@ void TimerCallBack(int) {
 	// Update speed of player
 	
 	if (alarms[0] && move_axis) {
-		glm::vec3 speed = { 0.01*move_axis[0], 0, 0.01*move_axis[1] };
+		glm::vec3 speed = { 0.05*move_axis[0], 0, 0.05*move_axis[1] };
 		player_obj->SetVelocity(speed);
 		alarms[0] = false;
 		glutTimerFunc(200, AlarmCallBack, 0);
@@ -152,7 +151,7 @@ static void InitGlutCallbacks(void) {
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(640, 480);
+	glutInitWindowSize(current_window_width, current_window_height);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("CrossRoad3D");
 	InitGlutCallbacks(); // Initialize callback functions

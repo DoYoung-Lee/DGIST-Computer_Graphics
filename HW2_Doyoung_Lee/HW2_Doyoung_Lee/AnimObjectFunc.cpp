@@ -125,7 +125,7 @@ Object* InitObject(ObjectList* target_obj_list) {
 	
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < room_col; j++) {
-			Object* start_tile = new Object({ i, 0, j }, 2, 24);
+			Object* start_tile = new Object({ i, 0, j - room_col / 2.0 }, 2, 24);
 			(*target_obj_list).CreateObject(start_tile);
 		}
 	}
@@ -134,18 +134,21 @@ Object* InitObject(ObjectList* target_obj_list) {
 	for (int i = 4; i < room_row; i++) {
 		float random = (std::rand() / 1.0) / RAND_MAX;
 		int row_tile; // 26 = Grass tile, 28 = Road tile
-		if (random > 0.8) {
+		int temp_n_indices;
+		if (random > 0.5) {
 			row_tile = 28;
+			temp_n_indices = 10;
 			random = (std::rand() / 1.0) / RAND_MAX;
 		}
 		else {
 			row_tile = 26;
+			temp_n_indices = 2;
 			random += 0.4;
 		}
 		for (int j = 0; j < room_col; j++) {
 			
-			Object* temp_grass = new Object({ i, 0, j }, 2, row_tile);
-			(*target_obj_list).CreateObject(temp_grass);
+			Object* road_grass = new Object({ i, 0, j - room_col / 2.0 }, temp_n_indices, row_tile);
+			(*target_obj_list).CreateObject(road_grass);
 		}
 	}
 	// create tree on the road
@@ -155,7 +158,7 @@ Object* InitObject(ObjectList* target_obj_list) {
 	// build wall
 
 	// create player marker
-	Object* player = new Object({ 0, 0, 0 }, 12, 0);
+	Object* player = new Object({ 0, 0, -0.5 }, 12, 0);
 	player->SetCollisionMask({ 1.0f, 1.0f, 1.0f });
 	(*target_obj_list).CreateObject(player);
 	
