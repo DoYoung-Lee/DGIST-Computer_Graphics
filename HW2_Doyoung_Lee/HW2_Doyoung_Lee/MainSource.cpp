@@ -132,7 +132,7 @@ void TimerCallBack(int) {
 		alarms[0] = false;
 		glutTimerFunc(200, AlarmCallBack, 0);
 	}
-	
+
 	room.StepObjects();
 
 	glutTimerFunc(33, TimerCallBack, 0);

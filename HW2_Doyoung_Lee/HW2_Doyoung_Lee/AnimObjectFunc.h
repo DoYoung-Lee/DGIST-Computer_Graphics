@@ -27,26 +27,24 @@ public:
 };
 
 class Object {
-private:
+protected:
 	glm::vec3 position;
 	glm::vec3 velocity;
-	glm::vec3 collision_mask;
 	int scale;
 	int n_indices;
 	int vertex_base_index;
-	bool wireframe;
 public:
-	Object();
 	Object(glm::vec3, int, int);
-	void SetModel(int, int, bool, float);
+	void SetModel(int, int, float);
 	glm::vec3 GetPosition();
+	glm::vec3 GetVelocity();
 	void SetPosition(glm::vec3);
 	void SetVelocity(glm::vec3);
-	void SetCollisionMask(glm::vec3);
-	bool Collide(Object*);
-	void UpdatePosition();
 	void StepSelf();
-	void DrawSelf();
+	void DrawSelf(Object*);
+	glm::vec3 collision_mask;
+
+	void(*func[3]) (Object* self);
 };
 
 Object* InitObject(ObjectList*);
