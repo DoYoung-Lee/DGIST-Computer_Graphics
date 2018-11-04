@@ -148,10 +148,11 @@ void InitObjectsVertex() {
 		40, 41, 42,
 		42, 43, 40, //Road tile end (28 ~ 37)
 	};
-
+	
 	ObjLoader("object\\policecar\\police_car.obj", &vertices_obj, &colors_obj, &indices_obj, vertices_obj.size());
 	ObjLoader("object\\taxi\\taxi.obj", &vertices_obj, &colors_obj, &indices_obj, vertices_obj.size());
-	ObjLoader("object\\truck\\truck.obj", &vertices_obj, &colors_obj, &indices_obj, vertices_obj.size());
+	ObjLoader("object\\truck\\truck_blue.obj", &vertices_obj, &colors_obj, &indices_obj, vertices_obj.size());
+	ObjLoader("object\\christmastree\\christmas_tree.obj", &vertices_obj, &colors_obj, &indices_obj, vertices_obj.size());
 }
 
 void RenderScene2DCB() { // legacy code for 2d drawing

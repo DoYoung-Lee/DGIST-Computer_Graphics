@@ -26,26 +26,37 @@ public:
 	void DrawObjects();
 };
 
-class Object {
-protected:
-	glm::vec3 position;
-	glm::vec3 velocity;
-	int scale;
+static struct Model
+{
 	int n_indices;
 	int vertex_base_index;
+	float scale;
+};
+
+class Object {
+	glm::vec3 position;
+	glm::vec3 velocity;
+	glm::vec3 rotation;
+	Model model;
 public:
 	Object(glm::vec3, int, int);
 	void SetModel(int, int, float);
-	glm::vec3 GetPosition();
-	glm::vec3 GetVelocity();
+	Model GetModel();
 	void SetPosition(glm::vec3);
+	glm::vec3 GetPosition();
 	void SetVelocity(glm::vec3);
+	glm::vec3 GetVelocity();
+	void SetRotation(glm::vec3);
+	glm::vec3 GetRotation();
 	void StepSelf();
 	void DrawSelf(Object*);
 	glm::vec3 collision_mask;
 
 	void(*func[3]) (Object* self);
 };
+
+extern Object* player_obj;
+Object* MakeCarObject(ObjectList*, glm::vec3, int);
 
 Object* InitObject(ObjectList*);
 

@@ -32,7 +32,7 @@ std::vector<unsigned int> indices_obj;
 int move_axis[2] = { 0, 0 };
 int modelview_index = 0;
 
-int room_row = 20;
+int room_row = 30;
 int room_col = 9;
 int current_window_width = 640;
 int current_window_height = 480;
@@ -42,10 +42,9 @@ Object* player_obj;
 
 bool alarms[2] = {true, true};
 
-void CreateMVP() {
+glm::mat4 CreateMVP() {
+	
 	// Make model view matrix
-	GLint matrix_loc = glGetUniformLocation(shader_program, "MVP");
-
 	glm::vec3 mvp_camera;
 	glm::vec3 mvp_focus;
 	glm::vec3 mvp_up;
@@ -87,13 +86,13 @@ void CreateMVP() {
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 MVP = projection * view * model;
 
-	glUniformMatrix4fv(matrix_loc, 1, GL_FALSE, &MVP[0][0]);
+	return MVP;
 }
 
 void RenderSceneObjCB() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	CreateMVP();
+	
 	// 1st attribute buffer: vertices
 	GLint position_loc = glGetAttribLocation(shader_program, "Position");
 	glEnableVertexAttribArray(position_loc);
@@ -107,6 +106,10 @@ void RenderSceneObjCB() {
 	glVertexAttribPointer(color_loc, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexbuffer_obj);
+
+	GLint matrix_loc = glGetUniformLocation(shader_program, "MVP");
+	glm::mat4 MVP = CreateMVP();
+	glUniformMatrix4fv(matrix_loc, 1, GL_FALSE, &MVP[0][0]);
 
 	// Draw each objects
 	glEnable(GL_DEPTH_TEST);
