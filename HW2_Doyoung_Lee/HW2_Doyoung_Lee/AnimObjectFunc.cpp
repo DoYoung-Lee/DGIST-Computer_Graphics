@@ -112,15 +112,15 @@ Object* MakeCarObject(ObjectList* target_obj_list, glm::vec3 make_position, int 
 	{
 	case 1:
 		make_model = { 158, 38, 0.9f };
-		make_collision_mask = {0.9f, 1.0f, 0.9f};
+		make_collision_mask = {0.85f, 1.0f, 0.9f};
 		break;
 	case 2:
 		make_model = { 158, 196, 0.7f };
-		make_collision_mask = { 0.7f, 1.0f, 0.7f };
+		make_collision_mask = { 0.65f, 1.0f, 0.7f };
 		break;
 	default:
 		make_model = { 236, 354, 0.9f };
-		make_collision_mask = { 0.9f, 1.0f, 1.0f };
+		make_collision_mask = { 0.85f, 1.0f, 1.0f };
 		break;
 	}
 
@@ -188,7 +188,7 @@ void MakeTreeObject(ObjectList* target_obj_list, glm::vec3 make_position) {
 
 	Object* tree = new Object(make_position, 316, 590);
 	(*target_obj_list).CreateObject(tree);
-
+	tree->collision_mask = glm::vec3(0.8f, 0.8f, 0.8f);
 	// Define step function
 	tree->func[0] = [](Object* self) {
 		// Get player position
@@ -240,10 +240,33 @@ Object* InitObject(ObjectList* target_obj_list) {
 		glm::vec3 current_vel = self->GetVelocity();
 		glm::vec3 new_position = current_position + current_vel;
 		self->SetPosition(new_position);
+		self->SetVelocity(current_vel * 0.85f);
 	};
 
-	std::srand(std::time(nullptr));
+	player->func[1] = [](Object* self) {
+		glm::vec3 position = self->GetPosition();
+		Model model = self->GetModel();
+		GLint x_loc = glGetUniformLocation(shader_program, "x");
+		GLint y_loc = glGetUniformLocation(shader_program, "y");
+		GLint z_loc = glGetUniformLocation(shader_program, "z");
+		GLint matrix_loc = glGetUniformLocation(shader_program, "MVP_obj");
 
+		glm::mat4 MVP = glm::mat4(1.0f);
+		MVP = glm::translate(MVP, glm::vec3(position.x, position.y, position.z));
+		MVP = glm::rotate(MVP, self->GetRotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
+		MVP = glm::scale(MVP, glm::vec3(self->GetModel().scale));
+		MVP = glm::translate(MVP, glm::vec3(-position.x, -position.y, -position.z));
+
+		glUniform1f(x_loc, position.x);
+		glUniform1f(y_loc, position.y);
+		glUniform1f(z_loc, position.z);
+		glUniformMatrix4fv(matrix_loc, 1, GL_FALSE, &MVP[0][0]);
+
+		glDrawElements(GL_TRIANGLES, 3 * model.n_indices, GL_UNSIGNED_INT, reinterpret_cast<void*> (model.vertex_base_index * sizeof(glm::vec3)));
+	};
+
+
+	std::srand(std::time(nullptr));
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < room_col; j++) {
 			Object* start_tile = new Object({ i, 0, j - room_col / 2.0 }, 2, 24);
@@ -281,13 +304,27 @@ Object* InitObject(ObjectList* target_obj_list) {
 				(*target_obj_list).CreateObject(road_grass);
 				// create tree on the road
 				float random_tree = (std::rand() / 1.0) / RAND_MAX;
-				if (random_tree > 0.5) {
+				if (random_tree > 0.6) {
 					MakeTreeObject(target_obj_list, glm::vec3(i, 0, j - room_col / 2.0));
+
 				}
 			}
 		}
-		
 	}
+
+	// End tile
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < room_col; j++) {
+			Object* end_tile = new Object({ room_row+i, 0, j - room_col / 2.0 }, 2, 24);
+			(*target_obj_list).CreateObject(end_tile);
+			end_tile->func[0] = [](Object* self) {
+				if (player_obj->GetPosition().x > self->GetPosition().x)
+					exit(0);
+			};
+		}
+	}
+	
+
 
 	// build wall
 

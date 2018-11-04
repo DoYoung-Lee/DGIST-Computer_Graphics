@@ -64,12 +64,12 @@ void InitObjectsVertex() {
 	
 	colors_obj = {
 		{ 1.0f, 0.0f, 0.0f }, // Player begin
+		{ 1.0f, 1.0f, 0.0f },
+		{ 1.0f, 1.0f, 0.0f },
 		{ 1.0f, 0.0f, 0.0f },
 		{ 1.0f, 0.0f, 0.0f },
-		{ 1.0f, 0.0f, 0.0f },
-		{ 1.0f, 0.0f, 0.0f },
-		{ 1.0f, 0.0f, 0.0f },
-		{ 1.0f, 0.0f, 0.0f },
+		{ 1.0f, 1.0f, 0.0f },
+		{ 1.0f, 1.0f, 0.0f },
 		{ 1.0f, 0.0f, 0.0f }, // Player end
 		{ 0.0f, 1.0f, 1.0f }, // Temp obj begin
 		{ 0.0f, 1.0f, 1.0f },

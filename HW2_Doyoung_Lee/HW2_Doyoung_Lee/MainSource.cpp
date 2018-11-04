@@ -18,6 +18,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#define PI 3.141592f
+
 GLuint shader_program;
 
 GLuint vertex_array_obj;
@@ -32,7 +34,7 @@ std::vector<unsigned int> indices_obj;
 int move_axis[2] = { 0, 0 };
 int modelview_index = 0;
 
-int room_row = 30;
+int room_row = 6;
 int room_col = 9;
 int current_window_width = 640;
 int current_window_height = 480;
@@ -62,6 +64,7 @@ glm::mat4 CreateMVP() {
 		mvp_focus.y = mvp_camera.y;
 		mvp_focus.z = mvp_camera.z;
 		mvp_up = { 0, 1, 0 };
+		projection = glm::rotate_slow(projection, -move_axis[1] * 0.5f * PI, glm::vec3(0, 1, 0));
 		break;
 	case 2:
 		projection = glm::ortho(-current_window_width / 200.0f, current_window_width / 200.0f, -current_window_height / 200.0f, current_window_height / 200.0f, 0.1f, 100.0f);
@@ -127,10 +130,11 @@ void AlarmCallBack(int a) {
 }
 
 void TimerCallBack(int) {
-	// Update speed of player
 	
-	if (alarms[0] && move_axis) {
-		glm::vec3 speed = { 0.05*move_axis[0], 0, 0.05*move_axis[1] };
+	player_obj->SetRotation(glm::vec3(0, move_axis[1] * 0.5 * 3.141592, 0));
+
+	if (alarms[0] && move_axis[0]) {
+		glm::vec3 speed = { 0.09*std::cos(PI / 2 * move_axis[1])*move_axis[0], 0, -0.09*std::sin(PI / 2 * move_axis[1])*move_axis[0] };
 		player_obj->SetVelocity(speed);
 		alarms[0] = false;
 		glutTimerFunc(200, AlarmCallBack, 0);
