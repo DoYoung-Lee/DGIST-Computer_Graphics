@@ -56,6 +56,8 @@ public:
 };
 
 extern Object* player_obj;
+extern glm::vec3 player_destination;
+extern int move_axis[2];
 Object* MakeCarObject(ObjectList*, glm::vec3, int);
 
 Object* InitObject(ObjectList*);

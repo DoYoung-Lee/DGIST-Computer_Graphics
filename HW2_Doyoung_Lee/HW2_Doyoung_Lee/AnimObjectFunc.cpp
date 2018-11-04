@@ -45,6 +45,7 @@ void ObjectList::DrawObjects() {
 Object::Object(glm::vec3 init_pos, int init_n_indices, int init_vbi) {
 	position = init_pos;
 	velocity = { 0, 0, 0 };
+	rotation = { 0, 0, 0 };
 	model.n_indices = init_n_indices;
 	model.vertex_base_index = init_vbi;
 	model.scale = 1.0f;
@@ -60,6 +61,10 @@ Object::Object(glm::vec3 init_pos, int init_n_indices, int init_vbi) {
 		GLint matrix_loc = glGetUniformLocation(shader_program, "MVP_obj");
 
 		glm::mat4 MVP = glm::mat4(1.0f);
+		MVP = glm::translate(MVP, glm::vec3(position.x, position.y, position.z));
+		MVP = glm::rotate(MVP, self->GetRotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
+		MVP = glm::scale(MVP, glm::vec3(self->GetModel().scale));
+		MVP = glm::translate(MVP, glm::vec3(-position.x, -position.y, -position.z));
 		
 		glUniform1f(x_loc, position.x);
 		glUniform1f(y_loc, position.y);
@@ -149,7 +154,7 @@ Object* MakeCarObject(ObjectList* target_obj_list, glm::vec3 make_position, int 
 			}
 		}
 		// Out of border?
-		if (abs(new_position.z) > room_col / 2.0f) {
+		if (abs(new_position.z) > room_col / 2.0f + 1) {
 			new_position.z *= -1;
 		}
 		// Update position
@@ -203,8 +208,8 @@ void MakeTreeObject(ObjectList* target_obj_list, glm::vec3 make_position) {
 			bool is_x_collide = abs(player_position.x - new_position.x) < (player_obj->collision_mask.x / 2.0 + collision_mask.x / 2.0);
 			bool is_z_collide = abs(player_position.z - new_position.z) < (player_obj->collision_mask.z / 2.0 + collision_mask.z / 2.0);
 			if (is_x_collide & is_z_collide) {
-				glm::vec3 player_vel = player_obj->GetVelocity();
-				player_obj->SetVelocity(glm::vec3(-player_vel.x, -player_vel.y, -player_vel.z));
+				// Set destination to previous cell
+				player_destination = new_position + glm::vec3(-std::cos(3.141592f / 2 * move_axis[1])*move_axis[0], 0, std::sin(3.141592f / 2 * move_axis[1])*move_axis[0]);
 			}
 		}
 	};
@@ -229,49 +234,61 @@ void MakeTreeObject(ObjectList* target_obj_list, glm::vec3 make_position) {
 	};
 }
 
+void MakeWallObject(ObjectList* target_obj_list, glm::vec3 make_position) {
+
+	Object* wall = new Object(make_position, 0, 0);
+	(*target_obj_list).CreateObject(wall);
+	wall->collision_mask = glm::vec3(1.0f, 1.0f, 1.0f);
+	// Define step function
+	wall->func[0] = [](Object* self) {
+		// Get player position
+		glm::vec3 player_position = player_obj->GetPosition();
+
+		// Calculate new position
+		glm::vec3 new_position = self->GetPosition();
+
+		// Collision test
+		glm::vec3 collision_mask = self->collision_mask;
+		if (abs(new_position.x - player_position.x) < 1.0f) {
+			bool is_x_collide = abs(player_position.x - new_position.x) < (player_obj->collision_mask.x / 2.0 + collision_mask.x / 2.0);
+			bool is_z_collide = abs(player_position.z - new_position.z) < (player_obj->collision_mask.z / 2.0 + collision_mask.z / 2.0);
+			if (is_x_collide & is_z_collide) {
+				// Set destination to previous cell
+				player_destination = new_position + glm::vec3(-std::cos(3.141592f / 2 * move_axis[1])*move_axis[0], 0, std::sin(3.141592f / 2 * move_axis[1])*move_axis[0]);
+			}
+		}
+	};
+
+	// Define draw function
+	wall->func[1] = [](Object* self) {};
+}
+
 Object* InitObject(ObjectList* target_obj_list) {
 	// create player marker
-	Object* player = new Object({ 0, 0, -0.5 }, 12, 0);
+	Object* player = new Object({ 0.0f, 0.0f, 0.5f }, 12, 0);
 	player->collision_mask = { 0.5f, 1.0f, 0.5f };
 	(*target_obj_list).CreateObject(player);
 
 	player->func[0] = [](Object* self) {
 		glm::vec3 current_position = self->GetPosition();
 		glm::vec3 current_vel = self->GetVelocity();
-		glm::vec3 new_position = current_position + current_vel;
+		glm::vec3 new_position = current_position + current_vel * (player_destination - current_position);
+		if (abs(player_destination - current_position).x < 0.0625f & abs(player_destination - current_position).z < 0.0625)
+			new_position = player_destination;
 		self->SetPosition(new_position);
-		self->SetVelocity(current_vel * 0.85f);
 	};
-
-	player->func[1] = [](Object* self) {
-		glm::vec3 position = self->GetPosition();
-		Model model = self->GetModel();
-		GLint x_loc = glGetUniformLocation(shader_program, "x");
-		GLint y_loc = glGetUniformLocation(shader_program, "y");
-		GLint z_loc = glGetUniformLocation(shader_program, "z");
-		GLint matrix_loc = glGetUniformLocation(shader_program, "MVP_obj");
-
-		glm::mat4 MVP = glm::mat4(1.0f);
-		MVP = glm::translate(MVP, glm::vec3(position.x, position.y, position.z));
-		MVP = glm::rotate(MVP, self->GetRotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
-		MVP = glm::scale(MVP, glm::vec3(self->GetModel().scale));
-		MVP = glm::translate(MVP, glm::vec3(-position.x, -position.y, -position.z));
-
-		glUniform1f(x_loc, position.x);
-		glUniform1f(y_loc, position.y);
-		glUniform1f(z_loc, position.z);
-		glUniformMatrix4fv(matrix_loc, 1, GL_FALSE, &MVP[0][0]);
-
-		glDrawElements(GL_TRIANGLES, 3 * model.n_indices, GL_UNSIGNED_INT, reinterpret_cast<void*> (model.vertex_base_index * sizeof(glm::vec3)));
-	};
-
 
 	std::srand(std::time(nullptr));
+	for (int j = 0; j < room_col + 2; j ++) {
+		MakeWallObject(target_obj_list, { -1.0, 0, j - (room_col + 2.0) / 2.0 });
+	}
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < room_col; j++) {
 			Object* start_tile = new Object({ i, 0, j - room_col / 2.0 }, 2, 24);
 			(*target_obj_list).CreateObject(start_tile);
 		}
+		MakeWallObject(target_obj_list, { i, 0, -(room_col / 2.0 + 1) });
+		MakeWallObject(target_obj_list, { i, 0, room_col / 2.0 });
 	}
 	
 	// fill grass and road
@@ -310,6 +327,8 @@ Object* InitObject(ObjectList* target_obj_list) {
 				}
 			}
 		}
+		MakeWallObject(target_obj_list, { i, 0, -(room_col / 2.0 + 1) });
+		MakeWallObject(target_obj_list, { i, 0, room_col / 2.0 });
 	}
 
 	// End tile
@@ -322,11 +341,9 @@ Object* InitObject(ObjectList* target_obj_list) {
 					exit(0);
 			};
 		}
+		MakeWallObject(target_obj_list, { i, 0, -(room_col / 2.0 + 1) });
+		MakeWallObject(target_obj_list, { i, 0, room_col / 2.0 });
 	}
-	
-
-
-	// build wall
 
 	return player;
 }

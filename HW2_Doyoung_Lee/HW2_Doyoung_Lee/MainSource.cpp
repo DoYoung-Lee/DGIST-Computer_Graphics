@@ -12,6 +12,8 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <ctime>
+#include <stdlib.h>
 
 #include <GL/glew.h>
 #include <gl/freeglut.h>
@@ -34,13 +36,14 @@ std::vector<unsigned int> indices_obj;
 int move_axis[2] = { 0, 0 };
 int modelview_index = 0;
 
-int room_row = 6;
-int room_col = 9;
+int room_row = std::floor(std::rand() % 15) + 10;
+int room_col = std::floor(std::rand() % 6) + 4;
 int current_window_width = 640;
 int current_window_height = 480;
 
 ObjectList room;
 Object* player_obj;
+glm::vec3 player_destination;
 
 bool alarms[2] = {true, true};
 
@@ -134,8 +137,9 @@ void TimerCallBack(int) {
 	player_obj->SetRotation(glm::vec3(0, move_axis[1] * 0.5 * 3.141592, 0));
 
 	if (alarms[0] && move_axis[0]) {
-		glm::vec3 speed = { 0.09*std::cos(PI / 2 * move_axis[1])*move_axis[0], 0, -0.09*std::sin(PI / 2 * move_axis[1])*move_axis[0] };
+		glm::vec3 speed = {0.35f, 0.0f, 0.35f};//{ 0.09*std::cos(PI / 2 * move_axis[1])*move_axis[0], 0, -0.09*std::sin(PI / 2 * move_axis[1])*move_axis[0] };
 		player_obj->SetVelocity(speed);
+		player_destination += glm::vec3(std::cos(PI / 2 * move_axis[1])*move_axis[0], 0, -std::sin(PI / 2 * move_axis[1])*move_axis[0]);
 		alarms[0] = false;
 		glutTimerFunc(200, AlarmCallBack, 0);
 	}
@@ -170,6 +174,7 @@ int main(int argc, char** argv) {
 	DoInitShader(&shader_program);
 	CreateVertexBuffer(); // Create vertex buffer using vertice data
 	player_obj = InitObject(&room);
+	player_destination = player_obj->GetPosition();
 	glutMainLoop();
 
 	return 0;
