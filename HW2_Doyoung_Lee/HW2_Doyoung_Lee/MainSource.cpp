@@ -61,13 +61,9 @@ glm::mat4 CreateMVP() {
 	switch (modelview_index)
 	{
 	case 1:
-		mvp_camera.x += 0.5;
-		mvp_camera.y += 0.5;
-		mvp_focus.x += 1;
-		mvp_focus.y = mvp_camera.y;
-		mvp_focus.z = mvp_camera.z;
+		mvp_camera += glm::vec3(0.25f * std::cos(PI / 2 * move_axis[1]), 0.5f, -0.25f * std::sin(PI / 2 * move_axis[1]));
+		mvp_focus += glm::vec3(std::cos(PI / 2 * move_axis[1]), 0.5f, -std::sin(PI / 2 * move_axis[1]));
 		mvp_up = { 0, 1, 0 };
-		projection = glm::rotate_slow(projection, -move_axis[1] * 0.5f * PI, glm::vec3(0, 1, 0));
 		break;
 	case 2:
 		projection = glm::ortho(-current_window_width / 200.0f, current_window_width / 200.0f, -current_window_height / 200.0f, current_window_height / 200.0f, 0.1f, 100.0f);
