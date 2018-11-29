@@ -115,11 +115,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimObjectFunc.cpp" />
+    <ClCompile Include="FileFunc.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="UserInputFunc.cpp" />
+    <ClCompile Include="VertexBufferFunc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="frag_shader_3d.glsl" />
     <None Include="vertex_shader_3d.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AnimObjectFunc.h" />
+    <ClInclude Include="FileFunc.h" />
+    <ClInclude Include="UserInputFunc.h" />
+    <ClInclude Include="VertexBufferFunc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
