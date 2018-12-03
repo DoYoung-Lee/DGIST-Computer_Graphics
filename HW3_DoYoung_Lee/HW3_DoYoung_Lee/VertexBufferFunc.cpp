@@ -10,7 +10,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-void DoInitShader(GLuint *shader_program) {
+void DoInitShader() {
 	InitShaders(shader_program, "vertex_shader_3d.glsl", "frag_shader_3d.glsl");
 }
 
@@ -228,6 +228,10 @@ void RenderScene3DCB() { // legacy code for simple 3d rendering
 	glDisableVertexAttribArray(color_loc);
 
 	glutSwapBuffers();
+}
+
+void RenderSceneObjCB() {
+
 }
 
 void CreateVertexBuffer() {
