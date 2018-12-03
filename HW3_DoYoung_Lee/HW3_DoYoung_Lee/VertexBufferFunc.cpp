@@ -11,7 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 void DoInitShader() {
-	InitShaders(shader_program, "vertex_shader_3d.glsl", "frag_shader_3d.glsl");
+	InitShaders(&shader_program, "vertex_shader_3d.glsl", "frag_shader_3d.glsl");
 }
 
 void InitObjectsVertex() {
