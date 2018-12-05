@@ -87,6 +87,54 @@ void InitShaders(GLuint *shader_program, const char* path_vertex_shader, const c
 	glUseProgram(*shader_program);
 }
 
+bool ObjLoader(const char* path) {
+	std::ifstream obj_stream(path);
+	std::vector<glm::vec4> temp_positions(1, glm::vec4(0, 0, 0, 0));
+	std::vector<glm::vec3> temp_texcoords(1, glm::vec3(0, 0, 0));
+	std::vector<glm::vec3> temp_normals(1, glm::vec3(0, 0, 0));
+	std::string line_string;
+
+	while (std::getline(obj_stream, line_string)) {
+		std::istringstream line_stream(line_string);
+		std::string line_type;
+		line_stream >> line_type;
+		// Vertex case
+		if (line_type == "v") {
+			float x = 0, y = 0, z = 0, w = 1;
+			line_stream >> x >> y >> z >> w;
+			temp_positions.push_back(glm::vec4(x, y, z, w));
+		}
+		// Texture coordinate case
+		else if (line_type == "vt") {
+			float u = 0, v = 0, w = 0;
+			line_stream >> u >> v >> w;
+			temp_texcoords.push_back(glm::vec3(u, v, w));
+		}
+		// Normal vector case
+		else if (line_type == "vn") {
+			float i = 0, j = 0, k = 0;
+			line_stream >> i >> j >> k;
+			temp_normals.push_back(glm::normalize(glm::vec3(i, j, k)));
+		}
+		// Face case
+		else if (line_type == "f") {
+			std::string ref_string;
+			while (line_stream >> ref_string) {
+				std::istringstream ref_stream(ref_string);
+				std::string v_string, vt_string, vn_string;
+
+
+
+			}
+		}
+	}
+
+	return true;
+}
+
+
+// legacy version of OBJ loader
+/*
 bool ObjLoader(const char* path, std::vector<glm::vec3> *out_vertices, std::vector<glm::vec3> *out_colors, std::vector<unsigned int> *out_vertex_indices, int vertex_index_base) {
 	std::ifstream obj_file(path);
 	std::string line_string;
@@ -119,3 +167,4 @@ bool ObjLoader(const char* path, std::vector<glm::vec3> *out_vertices, std::vect
 	}
 	return true;
 }
+*/
