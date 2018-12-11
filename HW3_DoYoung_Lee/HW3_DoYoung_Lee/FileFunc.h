@@ -16,6 +16,6 @@ struct int3 {
 	int v, vt, vn;
 };
 
-bool ObjLoader(const char*, std::vector<glm::vec3>*, std::vector<glm::vec3>*, std::vector<unsigned int>*, int);
+int ObjLoader(const char*, std::vector<glm::vec3>*, std::vector<glm::vec2>*, std::vector<glm::vec3>*, std::vector<unsigned int>*);
 
 #endif

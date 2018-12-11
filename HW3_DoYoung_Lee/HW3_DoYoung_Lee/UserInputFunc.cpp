@@ -8,20 +8,22 @@ void KeyboardCB(unsigned char key, int x, int y) {
 	case 'w':
 	case 'W':
 		move_axis[0] = 1;
+		move_axis[2] = 0;
 		break;
 	case 's':
 	case 'S':
 		move_axis[0] = -1;
+		move_axis[2] = 2;
 		break;
 	case 'a':
 	case 'A':
-		move_axis[1] += 1;
-		move_axis[1] %= 4;
+		move_axis[1] = -1;
+		move_axis[2] = 1;
 		break;
 	case 'd':
 	case 'D':
-		move_axis[1] -= 1;
-		move_axis[1] %= 4;
+		move_axis[1] = 1;
+		move_axis[2] = 3;
 		break;
 	case '1':
 		modelview_index = 1; // For first-person view
@@ -50,7 +52,7 @@ void KeyboardUpCB(unsigned char key, int x, int y) {
 	case 'A':
 	case 'd':
 	case 'D':
-		//move_axis[1] = 0;
+		move_axis[1] = 0;
 		break;
 	default:
 		break;

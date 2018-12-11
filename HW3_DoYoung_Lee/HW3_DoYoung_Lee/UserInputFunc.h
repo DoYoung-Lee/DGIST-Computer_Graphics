@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-extern int move_axis[2];
+extern int move_axis[3];
 extern int modelview_index;
 
 void KeyboardCB(unsigned char, int, int);

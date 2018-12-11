@@ -2,6 +2,7 @@
 	References :
 	http://www.opengl-tutorial.org/kr/beginners-tutorials/tutorial-7-model-loading/
 	https://stackoverflow.com/questions/14887012/object-loader-in-opengl
+	https://github.com/opengl-tutorials/ogl/blob/master/common/objloader.cpp#L100
 
    -------------------------------- */
 
@@ -87,12 +88,15 @@ void InitShaders(GLuint *shader_program, const char* path_vertex_shader, const c
 	glUseProgram(*shader_program);
 }
 
-bool ObjLoader(const char* path) {
+int ObjLoader(const char* path, std::vector<glm::vec3> *out_vertices, std::vector<glm::vec2> *out_uvs, std::vector<glm::vec3> *out_normals, std::vector<unsigned int> *out_indices) {
 	std::ifstream obj_stream(path);
-	std::vector<glm::vec4> temp_positions(1, glm::vec4(0, 0, 0, 0));
-	std::vector<glm::vec3> temp_texcoords(1, glm::vec3(0, 0, 0));
-	std::vector<glm::vec3> temp_normals(1, glm::vec3(0, 0, 0));
+	std::vector<glm::vec3> temp_vertices;
+	std::vector<glm::vec2> temp_uvs;
+	std::vector<glm::vec3> temp_normals;
+	std::vector<unsigned int> vertex_indices, uv_indices, normal_indices;
 	std::string line_string;
+	int base_index = (*out_vertices).size();
+	int out_n_indices = 0;
 
 	while (std::getline(obj_stream, line_string)) {
 		std::istringstream line_stream(line_string);
@@ -100,71 +104,54 @@ bool ObjLoader(const char* path) {
 		line_stream >> line_type;
 		// Vertex case
 		if (line_type == "v") {
-			float x = 0, y = 0, z = 0, w = 1;
-			line_stream >> x >> y >> z >> w;
-			temp_positions.push_back(glm::vec4(x, y, z, w));
+			float x = 0.0, y = 0.0, z = 0.0;
+			line_stream >> x >> y >> z;
+			temp_vertices.push_back(glm::vec3(x, y, z));
 		}
 		// Texture coordinate case
 		else if (line_type == "vt") {
-			float u = 0, v = 0, w = 0;
-			line_stream >> u >> v >> w;
-			temp_texcoords.push_back(glm::vec3(u, v, w));
+			float u = 0.0, v = 0.0;
+			line_stream >> u >> v;
+			temp_uvs.push_back(glm::vec2(u, v));
 		}
 		// Normal vector case
 		else if (line_type == "vn") {
-			float i = 0, j = 0, k = 0;
+			float i = 0.0, j = 0.0, k = 0.0;
 			line_stream >> i >> j >> k;
-			temp_normals.push_back(glm::normalize(glm::vec3(i, j, k)));
+			temp_normals.push_back(glm::vec3(i, j, k));
 		}
 		// Face case
 		else if (line_type == "f") {
 			std::string ref_string;
-			while (line_stream >> ref_string) {
-				std::istringstream ref_stream(ref_string);
-				std::string v_string, vt_string, vn_string;
-
-
-
-			}
-		}
-	}
-
-	return true;
-}
-
-
-// legacy version of OBJ loader
-/*
-bool ObjLoader(const char* path, std::vector<glm::vec3> *out_vertices, std::vector<glm::vec3> *out_colors, std::vector<unsigned int> *out_vertex_indices, int vertex_index_base) {
-	std::ifstream obj_file(path);
-	std::string line_string;
-
-	while (std::getline(obj_file, line_string)) {
-		std::istringstream line_stream(line_string);
-		std::string line_type;
-		line_stream >> line_type;
-		// vertex
-		if (line_type == "v") {
-			float x = 0, y = 0, z = 0;
-			line_stream >> x >> y >> z;
-			(*out_vertices).push_back(glm::vec3(x, y, z));
-			(*out_colors).push_back(glm::vec3(0.4f, 0.4f, 0.4f));
-		}
-		else if (line_type == "f") {
-			unsigned int vertex_index, uv_index, normal_index;
-			std::string ref_string;
 			for (int i = 0; i < 3; i++) {
-				std::string v_string, vt_string, vn_string;
 				line_stream >> ref_string;
+				
 				std::istringstream ref_stream(ref_string);
+				std::string v_string, vt_string, vn_string;
+
 				std::getline(ref_stream, v_string, '/');
 				std::getline(ref_stream, vn_string, '/');
 				std::getline(ref_stream, vt_string, '/');
-				vertex_index = atoi(v_string.c_str()) + vertex_index_base - 1;
-				(*out_vertex_indices).push_back(vertex_index);
+
+				vertex_indices.push_back(atoi(v_string.c_str()));
+				uv_indices.push_back(atoi(vt_string.c_str()));
+				normal_indices.push_back(atoi(vn_string.c_str()));
 			}
 		}
 	}
-	return true;
+
+	// Append to VBOs according to the indices
+	out_n_indices = vertex_indices.size();
+	for (unsigned int i = 0; i < out_n_indices; i++) {
+		glm::vec3 vertex = temp_vertices[vertex_indices[i] - 1];
+		glm::vec2 uv = temp_uvs[uv_indices[i] - 1];
+		glm::vec3 normal = temp_normals[normal_indices[i] - 1];
+		(*out_vertices).push_back(vertex);
+		(*out_uvs).push_back(uv);
+		(*out_normals).push_back(normal);
+		(*out_indices).push_back(i + base_index);
+	}
+	
+	obj_stream.close();
+	return out_n_indices / 3;
 }
-*/
